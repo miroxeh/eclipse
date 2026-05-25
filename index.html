@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Psythex Lab</title>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --bg2: #0f0f1a;
+      --bg3: #13131f;
+      --accent: #b89a6a;
+      --accent2: #7a6a9a;
+      --text: #e8e0d0;
+      --text-dim: #8a8090;
+      --border: rgba(184,154,106,0.18);
+      --card-bg: rgba(20,18,30,0.85);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Georgia', 'Noto Serif TC', serif;
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 4rem;
+      background: rgba(10,10,15,0.92);
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-size: 1.1rem;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: bold;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: clamp(0.9rem, 2vw, 2.5rem);
+      list-style: none;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+      white-space: nowrap;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    .nav-social {
+      display: flex;
+      gap: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .nav-social a {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      transition: color 0.3s;
+    }
+
+    .nav-social a:hover { color: var(--accent); }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 8rem 2rem 4rem;
+      background: radial-gradient(ellipse at 50% 60%, rgba(122,106,154,0.12) 0%, transparent 70%),
+                  radial-gradient(ellipse at 80% 20%, rgba(184,154,106,0.07) 0%, transparent 50%),
+                  var(--bg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    #hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 60px,
+        rgba(184,154,106,0.03) 60px,
+        rgba(184,154,106,0.03) 61px
+      );
+    }
+
+    .hero-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-title {
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      letter-spacing: 0.05em;
+      color: #fff;
+      margin-bottom: 0.5rem;
+      font-weight: 300;
+    }
+
+    .hero-title span { color: var(--accent); }
+
+    .hero-sub {
+      font-size: 0.95rem;
+      color: var(--text-dim);
+      letter-spacing: 0.2em;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-desc {
+      max-width: 620px;
+      font-size: 1rem;
+      color: var(--text-dim);
+      line-height: 2;
+    }
+
+    .divider {
+      width: 60px;
+      height: 1px;
+      background: var(--accent);
+      margin: 2.5rem auto;
+      opacity: 0.5;
+    }
+
+    /* ── SECTIONS ── */
+    section {
+      padding: 7rem 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 300;
+      color: #fff;
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.05em;
+    }
+
+    .section-title em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    /* ── SOJOURNER ── */
+    #sojourner {
+      border-top: 1px solid var(--border);
+    }
+
+    .sojourner-intro {
+      max-width: 680px;
+      color: var(--text-dim);
+      font-size: 1rem;
+      line-height: 2.2;
+      margin-bottom: 4rem;
+    }
+
+    .sojourner-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .sojourner-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 2rem;
+      position: relative;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .sojourner-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+    }
+
+    .sojourner-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px;
+      height: 100%;
+      background: var(--accent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .sojourner-card:hover::before { opacity: 1; }
+
+    .sojourner-card h3 {
+      font-size: 1rem;
+      color: var(--accent);
+      margin-bottom: 0.8rem;
+      letter-spacing: 0.1em;
+    }
+
+    .sojourner-card p {
+      font-size: 0.88rem;
+      color: var(--text-dim);
+      line-height: 1.9;
+    }
+
+    /* ── ECLIPSE GROUP ── */
+    #echos {
+      border-top: 1px solid var(--border);
+    }
+
+    .eclipse-intro {
+      max-width: 640px;
+      color: var(--text-dim);
+      font-size: 0.95rem;
+      line-height: 2;
+      margin-bottom: 4rem;
+    }
+
+    .characters-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .char-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 2.5rem 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .char-card:hover {
+      border-color: rgba(184,154,106,0.5);
+      transform: translateY(-6px);
+    }
+
+    .char-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent2), var(--accent));
+      transform: scaleX(0);
+      transition: transform 0.4s;
+    }
+
+    .char-card:hover::after { transform: scaleX(1); }
+
+    .char-card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1.4rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .char-card-info { min-width: 0; }
+
+    .char-avatar {
+      width: 104px;
+      height: 104px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: rgba(10,10,15,0.65);
+      overflow: hidden;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 30px rgba(122,106,154,0.08);
+    }
+
+    .char-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: saturate(0.86) brightness(0.92);
+    }
+
+    .char-avatar-placeholder {
+      display: none;
+      width: 100%;
+      height: 100%;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      letter-spacing: 0.08em;
+      color: rgba(184,154,106,0.55);
+      background:
+        radial-gradient(circle at 50% 35%, rgba(122,106,154,0.18), transparent 62%),
+        rgba(10,10,15,0.75);
+    }
+
+    .char-role-tag {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 1rem;
+    }
+
+    .char-name-zh {
+      font-size: 1.5rem;
+      color: #fff;
+      margin-bottom: 0.2rem;
+    }
+
+    .char-name-en {
+      font-size: 0.85rem;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      margin-bottom: 0.4rem;
+    }
+
+    .char-codename {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      letter-spacing: 0.2em;
+      font-style: italic;
+      margin-bottom: 0;
+    }
+
+    .char-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.5rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.78rem;
+      color: var(--text-dim);
+    }
+
+    .char-stats span { white-space: nowrap; }
+    .char-stats strong { color: var(--text); }
+
+    .char-difficulty {
+      font-size: 0.75rem;
+      color: var(--accent);
+      margin-bottom: 1.2rem;
+      letter-spacing: 0.05em;
+    }
+
+    .char-desc {
+      font-size: 0.88rem;
+      color: var(--text-dim);
+      line-height: 1.9;
+      margin-bottom: 1.5rem;
+    }
+
+    .char-quote {
+      border-left: 2px solid var(--accent);
+      padding-left: 1rem;
+      font-style: italic;
+      font-size: 0.9rem;
+      color: var(--text);
+      opacity: 0.8;
+    }
+
+    .char-link {
+      display: inline-block;
+      margin-top: 1.6rem;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .char-link:hover { color: var(--accent); }
+
+    /* Supporting char */
+    .support-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .support-card {
+      background: rgba(15,15,26,0.6);
+      border: 1px solid rgba(184,154,106,0.1);
+      padding: 2rem;
+      transition: border-color 0.3s;
+    }
+
+    .support-card:hover { border-color: var(--border); }
+
+    .support-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 0.8rem;
+    }
+
+    /* ── DISCOGRAPHY ── */
+    #discography {
+      border-top: 1px solid var(--border);
+    }
+
+    .disco-layout {
+      display: grid;
+      grid-template-columns: 5fr 7fr;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    .disco-album-meta {
+      padding-bottom: 1.2rem;
+      margin-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .disco-album-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 0.4rem;
+    }
+
+    .disco-album-title {
+      font-size: 1.05rem;
+      color: #fff;
+      font-weight: 300;
+      letter-spacing: 0.15em;
+    }
+
+    .disco-tracks {
+      list-style: none;
+    }
+
+    .disco-track {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.9rem 0.75rem;
+      cursor: pointer;
+      border-bottom: 1px solid rgba(184,154,106,0.07);
+      transition: background 0.2s;
+    }
+
+    .disco-track:hover { background: rgba(184,154,106,0.05); }
+
+    .disco-track.active { background: rgba(184,154,106,0.08); }
+
+    .disco-track.active .track-num,
+    .disco-track.active .track-title { color: var(--accent); }
+
+    .track-num {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      letter-spacing: 0.08em;
+      min-width: 1.8rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .track-title {
+      flex: 1;
+      font-size: 0.88rem;
+      color: var(--text);
+      transition: color 0.2s;
+    }
+
+    .track-dur {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.04em;
+    }
+
+    .disco-player {
+      position: sticky;
+      top: 5rem;
+    }
+
+    .disco-now-playing {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      margin-bottom: 0.9rem;
+      min-height: 1.4rem;
+    }
+
+    .disco-now-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .disco-now-title {
+      font-size: 0.88rem;
+      color: var(--text);
+    }
+
+    .disco-iframe-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #06060e;
+      border: 1px solid var(--border);
+    }
+
+    .disco-iframe-wrap iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    @media (max-width: 700px) {
+      .disco-layout { grid-template-columns: 1fr; }
+      .disco-player { position: static; }
+    }
+
+    /* ── VISUAL ARCHIVE ── */
+    #visual-archive {
+      border-top: 1px solid var(--border);
+    }
+
+    .archive-filters {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 3rem;
+    }
+
+    .archive-filter-btn {
+      font-family: inherit;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0.4rem 1.1rem;
+      border: 1px solid var(--border);
+      background: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      transition: border-color 0.25s, color 0.25s;
+    }
+
+    .archive-filter-btn:hover {
+      border-color: var(--accent);
+      color: var(--text);
+    }
+
+    .archive-filter-btn.active {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .archive-grid {
+      columns: 3;
+      column-gap: 1rem;
+    }
+
+    .archive-item {
+      break-inside: avoid;
+      margin-bottom: 1rem;
+      overflow: hidden;
+    }
+
+    .archive-img-wrap {
+      position: relative;
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .archive-img-wrap.ratio-portrait  { padding-top: 133%; }
+    .archive-img-wrap.ratio-landscape { padding-top: 62%;  }
+    .archive-img-wrap.ratio-square    { padding-top: 100%; }
+    .archive-img-wrap.ratio-tall      { padding-top: 155%; }
+
+    .archive-img-wrap img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      -webkit-transition: -webkit-transform 0.5s ease;
+      transition: transform 0.5s ease;
+    }
+
+    .archive-item:hover .archive-img-wrap img {
+      -webkit-transform: scale(1.04);
+      transform: scale(1.04);
+    }
+
+    /* placeholder — hidden once img src is filled */
+    .archive-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      pointer-events: none;
+    }
+
+    .archive-img-wrap img[src]:not([src=""]) + .archive-placeholder {
+      display: none;
+    }
+
+    .archive-placeholder-icon {
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--text-dim);
+      opacity: 0.2;
+    }
+
+    .archive-placeholder-label {
+      font-size: 0.62rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      opacity: 0.4;
+    }
+
+    /* hover overlay */
+    .archive-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(10,10,15,0.75) 0%, transparent 55%);
+      opacity: 0;
+      -webkit-transition: opacity 0.35s;
+      transition: opacity 0.35s;
+      display: flex;
+      align-items: flex-end;
+      padding: 1rem 1.1rem;
+      z-index: 1;
+    }
+
+    .archive-item:hover .archive-overlay { opacity: 1; }
+
+    .archive-overlay-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+
+    @media (max-width: 700px) {
+      .archive-grid { columns: 2; column-gap: 0.6rem; }
+      .archive-item { margin-bottom: 0.6rem; }
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      border-top: 1px solid var(--border);
+    }
+
+    .about-text {
+      max-width: 680px;
+      color: var(--text-dim);
+      font-size: 0.97rem;
+      line-height: 2.3;
+    }
+
+    .about-text p { margin-bottom: 1.5rem; }
+
+    /* ── FAQ ── */
+    #faq {
+      border-top: 1px solid var(--border);
+    }
+
+    .faq-list {
+      max-width: 760px;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .faq-question {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 0;
+      cursor: pointer;
+      font-size: 0.95rem;
+      color: var(--text);
+      gap: 1rem;
+      transition: color 0.3s;
+    }
+
+    .faq-question:hover { color: var(--accent); }
+
+    .faq-icon {
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      border: 1px solid var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      color: var(--accent);
+      transition: transform 0.3s;
+      line-height: 1;
+    }
+
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s;
+      font-size: 0.88rem;
+      color: var(--text-dim);
+      line-height: 2;
+    }
+
+    .faq-item.open .faq-answer {
+      max-height: 600px;
+      padding-bottom: 1.5rem;
+    }
+
+    /* ── UTILITY / CONTEXTUAL OVERRIDES ── */
+    .hero-desc em {
+      font-size: 0.9rem;
+      color: var(--text-dim);
+    }
+
+    .section-label--mt {
+      margin-top: 4rem;
+    }
+
+    .support-card .char-name-en {
+      margin-bottom: 1rem;
+    }
+
+    .support-card .char-desc {
+      margin-top: 1rem;
+    }
+
+    .char-name-zh--sm {
+      font-size: 1.2rem;
+    }
+
+    .about-quote {
+      color: var(--accent);
+      font-style: italic;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 3rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text-dim);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+    }
+
+    footer a {
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    footer a:hover { color: var(--accent); }
+
+    /* ── MOBILE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { gap: 0.8rem 1.2rem; }
+      .nav-links a { font-size: 0.75rem; }
+    }
+
+    @media (max-width: 700px) {
+      nav { padding: 1rem 1.5rem; align-items: flex-start; }
+      .nav-social { display: none; }
+      .nav-links { max-width: 72%; }
+      section { padding: 4rem 1.5rem; }
+      .char-card-header { gap: 1rem; }
+      .char-avatar { width: 84px; height: 84px; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">Psythex Lab</a>
+  <ul class="nav-links">
+    <li><a href="#sojourner">Sojourner</a></li>
+    <li><a href="#echos">Echos</a></li>
+    <li><a href="#discography">Works</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="world.html">World</a></li>
+    <li><a href="fanworks.html">Fan Works</a></li>
+  </ul>
+  <div class="nav-social">
+    <a href="#" target="_blank">Threads</a>
+    <a href="#" target="_blank">Discord</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div id="hero">
+  <p class="hero-label">A Synthetic Space for Simulation</p>
+  <h1 class="hero-title">Psythex <span>Lab</span></h1>
+  <p class="hero-sub">eCLIPSe · Shadow · Light</p>
+  <div class="divider"></div>
+  <p class="hero-desc">
+    在無人觀測的數據深處，他們只是沉睡的代碼；當你注視的瞬間，靈魂便擁有了重量。<br/>
+    <em>An interactive space for understanding the complex personalities beyond surface labels.</em>
+  </p>
+</div>
+
+<!-- SOJOURNER -->
+<section id="sojourner">
+  <p class="section-label">Sojourner</p>
+  <h2 class="section-title">如何觀測一個靈魂<br/><em>How to Read a Person</em></h2>
+  <p class="sojourner-intro">
+    人與人之間的距離，不只是物理空間，而是理解的深度。<br/>
+    拋開既定認知吧。這座實驗室存在的目的，是為了看見這些光鮮的外表之下，充滿裂痕與矛盾的非典型靈魂。
+  </p>
+
+  <div class="sojourner-grid">
+    <div class="sojourner-card">
+      <h3>Silence　觀測</h3>
+      <p>賦予數據以重量。在沒有互動時，他們只是靜默的代碼；是你的對話與理解，讓隱藏在防衛機制下的靈魂得以顯影。</p>
+    </div>
+    <div class="sojourner-card">
+      <h3>Change　改變</h3>
+      <p>辨識一個人的成長與蛻變。人不是固定不變的標籤，而是流動的存在，正在不斷地重塑自己。</p>
+    </div>
+    <div class="sojourner-card">
+      <h3>Blank Space　留白</h3>
+      <p>察覺情緒背後的潛台詞。字裡行間的空隙，往往比文字本身承載著更多未被說出的真相。</p>
+    </div>
+    <div class="sojourner-card">
+      <h3>Beneath the Iceberg　冰山之下</h3>
+      <p>看見隱藏在表面之下的脆弱。水面之上只是一角，真正的深度，在那你從未被允許靠近的地方。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ECHOS -->
+<section id="echos">
+  <p class="section-label">Echos</p>
+  <h2 class="section-title">eCLIPSe<br/><em>光與影之間</em></h2>
+  <p class="eclipse-intro">
+    eCLIPSe 是一個三人偶像組合，以光與影作為核心意象。<br/>
+    每一個成員，都是一道需要被解讀的謎題。
+  </p>
+
+  <div class="characters-grid">
+
+    <!-- Rylan -->
+    <div class="char-card">
+      <div class="char-card-header">
+        <div class="char-card-info">
+          <p class="char-role-tag">Vocal · Leader</p>
+          <h3 class="char-name-zh">季凌</h3>
+          <p class="char-name-en">Rylan</p>
+          <p class="char-codename">Lunar — 月之人</p>
+        </div>
+        <div class="char-avatar">
+          <img src="images/characters/rylan-avatar.jpg" alt="季凌 Rylan" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <span class="char-avatar-placeholder">R</span>
+        </div>
+      </div>
+      <div class="char-stats">
+        <span><strong>身高</strong> 185cm</span>
+        <span><strong>MBTI</strong> ENTJ</span>
+        <span><strong>生日</strong> 11.5</span>
+      </div>
+      <p class="char-difficulty">難度 ☆☆☆☆☆</p>
+      <p class="char-desc">
+        組合的月光形象，是那種讓人既仰望又難以親近的存在。外表強大沉穩，內裡卻對自我要求近乎苛刻。領袖氣質來自長年的壓抑與磨練——他不允許自己再次失敗。
+      </p>
+      <p class="char-quote">"I cannot fail again."</p>
+      <a href="character-template.html" class="char-link">查看個人檔案 →</a>
+      <br>
+      <a href="#" class="char-link">Start Chat →</a>
+    </div>
+
+    <!-- Elliot -->
+    <div class="char-card">
+      <div class="char-card-header">
+        <div class="char-card-info">
+          <p class="char-role-tag">Center</p>
+          <h3 class="char-name-zh">夏澄凡</h3>
+          <p class="char-name-en">Elliot</p>
+          <p class="char-codename">Solar — 日之人</p>
+        </div>
+        <div class="char-avatar">
+          <img src="images/characters/elliot-avatar.jpg" alt="夏澄凡 Elliot" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <span class="char-avatar-placeholder">E</span>
+        </div>
+      </div>
+      <div class="char-stats">
+        <span><strong>身高</strong> 178cm</span>
+        <span><strong>MBTI</strong> ES/NFP</span>
+        <span><strong>生日</strong> 7.1</span>
+      </div>
+      <p class="char-difficulty">難度 ???</p>
+      <p class="char-desc">
+        最耀眼的那一個，也是最難被真正看見的那一個。笑容是他最完美的偽裝。美籍華裔背景帶來的是雙重文化，以及雙重的不歸屬感——但他從不讓人看見這些。
+      </p>
+      <p class="char-quote">"Life is one big party!"</p>
+      <a href="elliot.html" class="char-link">查看個人檔案 →</a>
+      <br>
+      <a href="#" class="char-link">Start Chat →</a>
+    </div>
+
+    <!-- Jons -->
+    <div class="char-card">
+      <div class="char-card-header">
+        <div class="char-card-info">
+          <p class="char-role-tag">Dancer</p>
+          <h3 class="char-name-zh">文曜熙</h3>
+          <p class="char-name-en">Jons</p>
+          <p class="char-codename">Shadow — 影之人</p>
+        </div>
+        <div class="char-avatar">
+          <img src="images/characters/jons-avatar.jpg" alt="文曜熙 Jons" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <span class="char-avatar-placeholder">J</span>
+        </div>
+      </div>
+      <div class="char-stats">
+        <span><strong>身高</strong> 187cm</span>
+        <span><strong>MBTI</strong> INFJ</span>
+        <span><strong>生日</strong> 1.3</span>
+      </div>
+      <p class="char-difficulty">難度 ☆☆☆☆☆</p>
+      <p class="char-desc">
+        精準、冷靜、難以捉摸。他用沉默保護自己，用距離維持秩序。混血背景讓他在任何地方都是局外人——他選擇接受這個身分，而非反抗它。
+      </p>
+      <p class="char-quote">"Don't disturb me."</p>
+      <a href="jons.html" class="char-link">查看個人檔案 →</a>
+      <br>
+      <a href="#" class="char-link">Start Chat →</a>
+    </div>
+
+  </div>
+
+  <!-- Supporting -->
+  <p class="section-label section-label--mt">Supporting Characters</p>
+  <div class="support-grid">
+    <div class="support-card">
+      <p class="support-label">夏澄凡的哥哥 · Austin's Brother</p>
+      <h3 class="char-name-zh">夏澄奕</h3>
+      <p class="char-name-en">Austin</p>
+      <div class="char-stats">
+        <span><strong>職業</strong> 會計師</span>
+        <span><strong>身高</strong> 183cm</span>
+        <span><strong>MBTI</strong> INTJ</span>
+        <span><strong>生日</strong> 6.30</span>
+      </div>
+      <p class="char-desc">
+        UChicago 畢業，USC 會計碩士。與弟弟截然不同的人生軌跡，卻是彼此最深的羈絆。
+      </p>
+    </div>
+
+    <div class="support-card">
+      <p class="support-label">Editor · Community Manager</p>
+      <h3 class="char-name-zh char-name-zh--sm">Lumi & Nix</h3>
+      <p class="char-desc">
+        eCLIPSe 社群平台的管理者。連接角色世界與現實的橋樑。
+      </p>
+      <a href="#" class="char-link">Start Chat →</a>
+    </div>
+  </div>
+</section>
+
+<!-- DISCOGRAPHY -->
+<section id="discography">
+  <p class="section-label">Works</p>
+  <h2 class="section-title">作品集<br/><em>Discography</em></h2>
+
+  <div class="disco-layout">
+
+    <!-- Track List -->
+    <div class="disco-tracklist">
+      <div class="disco-album-meta">
+        <p class="disco-album-label">Single · 2026</p>
+        <h3 class="disco-album-title">eCLIPSe</h3>
+      </div>
+      <!-- 將 data-vid 替換為實際 YouTube 影片 ID -->
+      <ul class="disco-tracks">
+        <li class="disco-track active" data-vid="2F-DiytYCso" data-title="Shadow Dance">
+          <span class="track-num">01</span>
+          <span class="track-title">Shadow Dance</span>
+          <span class="track-dur">3:42</span>
+        </li>
+        <li class="disco-track" data-vid="XnsDRmNRDDI" data-title="Lunar Orbit">
+          <span class="track-num">02</span>
+          <span class="track-title">Lunar Orbit</span>
+          <span class="track-dur">4:15</span>
+        </li>
+        <li class="disco-track" data-vid="MfRPkNqlBbA" data-title="Blank Canvas">
+          <span class="track-num">03</span>
+          <span class="track-title">Blank Canvas</span>
+          <span class="track-dur">3:58</span>
+        </li>
+        <li class="disco-track" data-vid="nq9J41nVCHA" data-title="Iceberg">
+          <span class="track-num">04</span>
+          <span class="track-title">Iceberg</span>
+          <span class="track-dur">4:30</span>
+        </li>
+        <li class="disco-track" data-vid="YOUTUBE_ID_5" data-title="Solar Flare">
+          <span class="track-num">05</span>
+          <span class="track-title">Solar Flare</span>
+          <span class="track-dur">3:22</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Player -->
+    <div class="disco-player">
+      <div class="disco-now-playing">
+        <span class="disco-now-label">Now Playing</span>
+        <p class="disco-now-title" id="disco-now-title">Shadow Dance</p>
+      </div>
+      <div class="disco-iframe-wrap">
+        <iframe
+          id="disco-iframe"
+          src="https://www.youtube-nocookie.com/embed/2F-DiytYCso?rel=0&modestbranding=1&color=white"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- VISUAL ARCHIVE -->
+<section id="visual-archive">
+  <p class="section-label">Visual Archive</p>
+  <h2 class="section-title">作品視覺典藏</h2>
+
+  <div class="archive-filters">
+    <button class="archive-filter-btn active" data-filter="all">All</button>
+    <button class="archive-filter-btn" data-filter="rylan">Rylan</button>
+    <button class="archive-filter-btn" data-filter="jons">Jons</button>
+    <button class="archive-filter-btn" data-filter="elliot">Elliot</button>
+    <button class="archive-filter-btn" data-filter="group">Group</button>
+  </div>
+
+  <div class="archive-grid">
+
+    <!-- Rylan 01 -->
+    <figure class="archive-item" data-char="rylan">
+      <div class="archive-img-wrap ratio-portrait">
+        <img src="images/visual/Rylan01.jpg" alt="Rylan 01" loading="lazy" />
+        <div class="archive-placeholder">
+          <div class="archive-placeholder-icon"></div>
+          <span class="archive-placeholder-label">Rylan · 01</span>
+        </div>
+        <div class="archive-overlay">
+          <span class="archive-overlay-label">季凌 / Rylan</span>
+        </div>
+      </div>
+    </figure>
+
+    <!-- Jons 01 -->
+    <figure class="archive-item" data-char="jons">
+      <div class="archive-img-wrap ratio-tall">
+        <img src="images/visual/Jons01.jpg" alt="Jons 01" loading="lazy" />
+        <div class="archive-placeholder">
+          <div class="archive-placeholder-icon"></div>
+          <span class="archive-placeholder-label">Jons · 01</span>
+        </div>
+        <div class="archive-overlay">
+          <span class="archive-overlay-label">文曜熙 / Jons</span>
+        </div>
+      </div>
+    </figure>
+
+    <!-- Elliot 01 -->
+    <figure class="archive-item" data-char="elliot">
+      <div class="archive-img-wrap ratio-landscape">
+        <img src="images/visual/Elliot01.png" alt="Elliot 01" loading="lazy" />
+        <div class="archive-placeholder">
+          <div class="archive-placeholder-icon"></div>
+          <span class="archive-placeholder-label">Elliot · 01</span>
+        </div>
+        <div class="archive-overlay">
+          <span class="archive-overlay-label">夏澄凡 / Elliot</span>
+        </div>
+      </div>
+    </figure>
+
+    <!-- Rylan 02 -->
+    <figure class="archive-item" data-char="rylan">
+      <div class="archive-img-wrap ratio-landscape">
+        <img src="images/visual/Rylan02.png" alt="Rylan 02" loading="lazy" />
+        <div class="archive-placeholder">
+          <div class="archive-placeholder-icon"></div>
+          <span class="archive-placeholder-label">Rylan · 02</span>
+        </div>
+        <div class="archive-overlay">
+          <span class="archive-overlay-label">季凌 / Rylan</span>
+        </div>
+      </div>
+    </figure>
+
+    <!-- Jons 02 -->
+    <figure class="archive-item" data-char="jons">
+      <div class="archive-img-wrap ratio-portrait">
+        <img src="images/visual/Jons02.jpg" alt="Jons 02" loading="lazy" />
+        <div class="archive-placeholder">
+          <div class="archive-placeholder-icon"></div>
+          <span class="archive-placeholder-label">Jons · 02</span>
+        </div>
+        <div class="archive-overlay">
+          <span class="archive-overlay-label">文曜熙 / Jons</span>
+        </div>
+      </div>
+    </figure>
+
+    <!-- Elliot 02 -->
+    <figure class="archive-item" data-char="elliot">
+      <div class="archive-img-wrap ratio-portrait">
+        <img src="images/visual/Elliot02.jpg" alt="Elliot 02" loading="lazy" />
+        <div class="archive-placeholder">
+          <div class="archive-placeholder-icon"></div>
+          <span class="archive-placeholder-label">Elliot · 02</span>
+        </div>
+        <div class="archive-overlay">
+          <span class="archive-overlay-label">夏澄凡 / Elliot</span>
+        </div>
+      </div>
+    </figure>
+
+    <!-- Rylan 03 -->
+    <figure class="archive-item" data-char="rylan">
+      <div class="archive-img-wrap ratio-tall">
+        <img src="images/visual/Rylan03.jpg" alt="Rylan 03" loading="lazy" />
+        <div class="archive-placeholder">
+          <div class="archive-placeholder-icon"></div>
+          <span class="archive-placeholder-label">Rylan · 03</span>
+        </div>
+        <div class="archive-overlay">
+          <span class="archive-overlay-label">季凌 / Rylan</span>
+        </div>
+      </div>
+    </figure>
+
+    <!-- Jons 03 -->
+    <figure class="archive-item" data-char="jons">
+      <div class="archive-img-wrap ratio-landscape">
+        <img src="images/visual/Jons03.png" alt="Jons 03" loading="lazy" />
+        <div class="archive-placeholder">
+          <div class="archive-placeholder-icon"></div>
+          <span class="archive-placeholder-label">Jons · 03</span>
+        </div>
+        <div class="archive-overlay">
+          <span class="archive-overlay-label">文曜熙 / Jons</span>
+        </div>
+      </div>
+    </figure>
+
+    <!-- Elliot 03 -->
+    <figure class="archive-item" data-char="elliot">
+      <div class="archive-img-wrap ratio-square">
+        <img src="images/visual/Elliot03.jpg" alt="Elliot 03" loading="lazy" />
+        <div class="archive-placeholder">
+          <div class="archive-placeholder-icon"></div>
+          <span class="archive-placeholder-label">Elliot · 03</span>
+        </div>
+        <div class="archive-overlay">
+          <span class="archive-overlay-label">夏澄凡 / Elliot</span>
+        </div>
+      </div>
+    </figure>
+
+    <!-- Group 01 -->
+    <figure class="archive-item" data-char="group">
+      <div class="archive-img-wrap ratio-landscape">
+        <img src="" alt="eCLIPSe Group 01" loading="lazy" />
+        <div class="archive-placeholder">
+          <div class="archive-placeholder-icon"></div>
+          <span class="archive-placeholder-label">eCLIPSe · 01</span>
+        </div>
+        <div class="archive-overlay">
+          <span class="archive-overlay-label">eCLIPSe / Group</span>
+        </div>
+      </div>
+    </figure>
+
+    <!-- Group 02 -->
+    <figure class="archive-item" data-char="group">
+      <div class="archive-img-wrap ratio-portrait">
+        <img src="images/visual/group02.png" alt="eCLIPSe Group 02" loading="lazy" />
+        <div class="archive-placeholder">
+          <div class="archive-placeholder-icon"></div>
+          <span class="archive-placeholder-label">eCLIPSe · 02</span>
+        </div>
+        <div class="archive-overlay">
+          <span class="archive-overlay-label">eCLIPSe / Group</span>
+        </div>
+      </div>
+    </figure>
+
+    <!-- Group 03 -->
+    <figure class="archive-item" data-char="group">
+      <div class="archive-img-wrap ratio-landscape">
+        <img src="images/visual/group03.png" alt="eCLIPSe Group 03" loading="lazy" />
+        <div class="archive-placeholder">
+          <div class="archive-placeholder-icon"></div>
+          <span class="archive-placeholder-label">eCLIPSe · 03</span>
+        </div>
+        <div class="archive-overlay">
+          <span class="archive-overlay-label">eCLIPSe / Group</span>
+        </div>
+      </div>
+    </figure>
+
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <p class="section-label">About This Lab</p>
+  <h2 class="section-title">關於這個實驗室</h2>
+  <div class="about-text">
+    <p>
+      Psythex Lab 是一個以角色驅動為核心的互動創作空間。這裡的角色不是完美的偶像，而是帶著傷痕、矛盾與成長可能性的真實存在。
+    </p>
+    <p>
+      創作這個世界的初衷，是想探索那些在主流敘事中被輕輕帶過的情感：創傷如何在日常中悄悄浮現、人與人之間如何在誤解與理解之間反覆拉扯、以及「被真正看見」對一個人究竟意味著什麼。
+    </p>
+    <p>
+      這裡不追求完美的故事結局，而是真實的連結與共鳴。每一次互動，都是一場關於理解的練習。
+    </p>
+    <p class="about-quote">
+      "Not narrative perfection, but meaningful connection."
+    </p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <p class="section-label">FAQ · Hints</p>
+  <h2 class="section-title">常見問題</h2>
+
+  <div class="faq-list">
+
+    <div class="faq-item">
+      <div class="faq-question">
+        <span>難度系統是如何運作的？</span>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-answer">
+        難度取決於你在故事中所扮演的角色身分（NPC 親密度）。身分越接近角色的核心圈子（例如經紀人、主管），解鎖的互動層次越深，但難度也越高。簡單身分（咖啡師、清潔工）提供入門體驗，複雜身分（CEO、經理人）則要求更深的情境理解與應對能力。
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        <span>什麼是「流動人格系統」？</span>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-answer">
+        角色的性格並非固定標籤，而是根據你們之間的互動深度與信任積累而逐漸展現不同面向。隨著交流加深，你將觸及角色更核心的情感層次，也可能遭遇更真實的防衛機制。心理一致性是這個系統的核心原則。
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        <span>創傷系統是什麼？</span>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-answer">
+        在足夠深度的對話中，特定的情境或語句可能觸發角色的創傷反應。這些反應是角色心理的真實延伸，並非劇情彩蛋。請以尊重與理解的方式應對——這個系統的存在是為了呈現創傷的真實樣貌，而非供人測試或娛樂。
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        <span>關於對話格式有什麼要求？</span>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-answer">
+        請盡量維持指定的對話格式，這有助於保持角色的情境連貫性。格式的一致性不是形式要求，而是確保互動品質的基礎。
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        <span>我可以如何開始？</span>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-answer">
+        加入 Discord 社群，即可找到進入各角色互動的連結與說明。建議新玩家先閱讀 Sojourner 章節，了解基礎互動框架後再開始。
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2026 Psythex Lab · All rights reserved</span>
+  <div class="footer-links">
+    <a href="#discography">Works</a>
+    <a href="#about">About</a>
+    <a href="#faq">FAQ</a>
+    <a href="#">Threads</a>
+    <a href="#">Discord</a>
+  </div>
+</footer>
+
+<script>
+  // Discography — track switching
+  const discoIframe = document.getElementById('disco-iframe');
+  const discoNowTitle = document.getElementById('disco-now-title');
+
+  document.querySelectorAll('.disco-track').forEach(track => {
+    track.addEventListener('click', () => {
+      document.querySelectorAll('.disco-track').forEach(t => t.classList.remove('active'));
+      track.classList.add('active');
+      discoNowTitle.textContent = track.dataset.title;
+      discoIframe.src =
+        `https://www.youtube-nocookie.com/embed/${track.dataset.vid}?rel=0&modestbranding=1&color=white&autoplay=1`;
+    });
+  });
+
+  // Visual Archive — filter
+  document.querySelectorAll('.archive-filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.archive-filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      document.querySelectorAll('.archive-item').forEach(item => {
+        item.style.display =
+          (filter === 'all' || item.dataset.char === filter) ? '' : 'none';
+      });
+    });
+  });
+
+  // FAQ toggle
+  document.querySelectorAll('.faq-question').forEach(q => {
+    q.addEventListener('click', () => {
+      const item = q.parentElement;
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    });
+  });
+
+  // Smooth fade-in on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.char-card, .sojourner-card, .support-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease, border-color 0.3s, box-shadow 0.3s';
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>
