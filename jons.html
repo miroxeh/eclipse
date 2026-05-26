@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>文曜熙 Jons — eCLIPSe.Box-log</title>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --accent: #b89a6a;
+      --accent2: #7a6a9a;
+      --accent-char: #9a8fbc; /* 影・灰紫銀 */
+      --text: #e8e0d0;
+      --text-dim: #8a8090;
+      --border: rgba(184,154,106,0.18);
+      --card-bg: rgba(20,18,30,0.85);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Georgia', 'Noto Serif TC', serif;
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 4rem;
+      background: rgba(10,10,15,0.92);
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-size: 1.1rem;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: bold;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: clamp(0.9rem, 2vw, 2.5rem);
+      list-style: none;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+      white-space: nowrap;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    .nav-social {
+      display: flex;
+      gap: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .nav-social a {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      transition: color 0.3s;
+    }
+
+    .nav-social a:hover { color: var(--accent); }
+
+    /* ── BACK LINK ── */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .back-link:hover { color: var(--accent); }
+
+    /* ── CHARACTER HERO ── */
+    #char-hero {
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 9rem 5rem 5rem;
+      background:
+        radial-gradient(ellipse at 75% 30%, rgba(138,172,204,0.12) 0%, transparent 55%),
+        radial-gradient(ellipse at 20% 75%, rgba(184,154,106,0.06) 0%, transparent 50%),
+        var(--bg);
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid var(--border);
+    }
+
+    #char-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 80px,
+        rgba(138,172,204,0.025) 80px,
+        rgba(138,172,204,0.025) 81px
+      );
+      pointer-events: none;
+    }
+
+    .char-hero-tag {
+      font-size: 0.65rem;
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+      color: var(--accent-char);
+      margin-bottom: 1.2rem;
+    }
+
+    .char-hero-name-zh {
+      font-size: clamp(3.5rem, 8vw, 7rem);
+      font-weight: 300;
+      color: #fff;
+      letter-spacing: 0.08em;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .char-hero-name-en {
+      font-size: 1.1rem;
+      color: var(--accent);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 0.3rem;
+    }
+
+    .char-hero-codename {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      letter-spacing: 0.2em;
+      font-style: italic;
+      margin-bottom: 2rem;
+    }
+
+    .char-hero-quote {
+      max-width: 480px;
+      font-size: 1rem;
+      font-style: italic;
+      color: var(--text);
+      border-left: 2px solid var(--accent-char);
+      padding-left: 1.2rem;
+      margin-bottom: 3rem;
+      opacity: 0.85;
+    }
+
+    .char-hero-stats {
+      display: flex;
+      gap: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-stat-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .hero-stat-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    .hero-stat-value {
+      font-size: 0.95rem;
+      color: var(--text);
+      letter-spacing: 0.05em;
+    }
+
+    .hero-stat-value.difficulty { color: var(--accent); }
+
+    /* ── SHARED SECTION STYLES ── */
+    .page-section {
+      padding: 6rem 5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      border-top: 1px solid var(--border);
+    }
+
+    .section-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.8rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      font-weight: 300;
+      color: #fff;
+      margin-bottom: 2.5rem;
+      letter-spacing: 0.05em;
+    }
+
+    .section-title em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    /* ── PROFILE ── */
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .profile-bio {
+      color: var(--text-dim);
+      font-size: 0.95rem;
+      line-height: 2.2;
+    }
+
+    .profile-bio p { margin-bottom: 1.4rem; }
+
+    .profile-traits {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .trait-group-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 0.6rem;
+    }
+
+    .trait-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .trait-tag {
+      font-size: 0.75rem;
+      padding: 0.3rem 0.8rem;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      letter-spacing: 0.05em;
+    }
+
+    .trait-tag--accent {
+      border-color: rgba(138,172,204,0.35);
+      color: var(--accent-char);
+    }
+
+    /* ── DIALOGUES ── */
+    .dialogue-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .dialogue-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 2rem 2.2rem;
+      position: relative;
+    }
+
+    .dialogue-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 2px;
+      height: 100%;
+      background: var(--accent-char);
+      opacity: 0.6;
+    }
+
+    .dialogue-scenario {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent-char);
+      margin-bottom: 1.4rem;
+      opacity: 0.8;
+    }
+
+    .dialogue-exchange {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .dialogue-line {
+      display: grid;
+      grid-template-columns: 5rem 1fr;
+      gap: 1rem;
+      font-size: 0.88rem;
+      line-height: 1.9;
+    }
+
+    .dialogue-role {
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      padding-top: 0.2rem;
+      text-align: right;
+    }
+
+    .dialogue-line.char .dialogue-role { color: var(--accent-char); }
+
+    .dialogue-text { color: var(--text-dim); }
+
+    .dialogue-line.char .dialogue-text { color: var(--text); }
+
+    .dialogue-card--placeholder {
+      border-style: dashed;
+      opacity: 0.4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100px;
+      cursor: default;
+    }
+
+    .dialogue-placeholder-text {
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    /* ── SECRET FILES ── */
+    .secrets-header {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .secrets-clearance {
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.8rem;
+      border: 1px solid rgba(180,60,60,0.5);
+      color: rgba(200,80,80,0.8);
+    }
+
+    .secrets-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .secret-file {
+      background: rgba(12,11,20,0.9);
+      border: 1px solid var(--border);
+      padding: 1.8rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .secret-file-level {
+      font-size: 0.58rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .secret-file-level--open { color: rgba(100,180,100,0.7); }
+    .secret-file-level--restricted { color: rgba(200,160,60,0.8); }
+    .secret-file-level--classified { color: rgba(200,80,80,0.8); }
+
+    .secret-file-title {
+      font-size: 0.85rem;
+      color: var(--text);
+      letter-spacing: 0.08em;
+      margin-bottom: 1.2rem;
+    }
+
+    .secret-file-body {
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      line-height: 2;
+    }
+
+    .redacted {
+      display: inline-block;
+      background: rgba(180,180,180,0.15);
+      color: transparent;
+      border-radius: 2px;
+      user-select: none;
+      letter-spacing: 0;
+    }
+
+    /* Locked file overlay */
+    .secret-file--locked {
+      cursor: default;
+    }
+
+    .secret-file--locked .secret-file-body {
+      position: relative;
+    }
+
+    .secret-lock-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 0%, rgba(10,10,15,0.96) 50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding-bottom: 1.5rem;
+      gap: 0.6rem;
+    }
+
+    .secret-lock-icon {
+      font-size: 1rem;
+      color: var(--text-dim);
+      opacity: 0.5;
+    }
+
+    .secret-lock-text {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      opacity: 0.5;
+    }
+
+    .secret-file--locked::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 1px solid rgba(200,80,80,0.15);
+      pointer-events: none;
+    }
+
+    /* ── LIVING SPACE ── */
+    .room-layout {
+      display: grid;
+      grid-template-columns: 5fr 4fr;
+      gap: 3.5rem;
+      align-items: start;
+    }
+
+    .room-img-wrap {
+      position: relative;
+      width: 100%;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      background: rgba(10,12,18,0.9);
+    }
+
+    .room-carousel {
+      position: relative;
+      width: 100%;
+      min-height: 320px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(10,12,18,0.9);
+    }
+
+    .room-slide {
+      display: none;
+      width: 100%;
+    }
+
+    .room-slide.active {
+      display: block;
+    }
+
+    .room-slide img {
+      width: 100%;
+      height: auto;
+      max-height: 520px;
+      object-fit: contain;
+      display: block;
+      opacity: 1;
+      filter: none;
+      transition: opacity 0.4s;
+    }
+
+    .room-img-wrap:hover .room-slide img {
+      opacity: 1;
+      filter: none;
+    }
+
+    .room-placeholder {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      min-height: 320px;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+    }
+
+    .room-ph-icon {
+      width: 34px;
+      height: 34px;
+      border: 1px solid rgba(138,172,204,0.18);
+    }
+
+    .room-ph-text {
+      font-size: 0.62rem;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--accent-char);
+      opacity: 0.3;
+    }
+
+    .room-carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 2.4rem;
+      height: 2.4rem;
+      border: 1px solid rgba(138,172,204,0.28);
+      background: rgba(10,10,15,0.68);
+      color: var(--accent-char);
+      font-family: inherit;
+      font-size: 1.1rem;
+      cursor: pointer;
+      z-index: 3;
+      transition: border-color 0.25s, background 0.25s, color 0.25s;
+    }
+
+    .room-carousel-btn:hover {
+      border-color: rgba(138,172,204,0.55);
+      background: rgba(20,24,34,0.9);
+      color: #fff;
+    }
+
+    .room-carousel-btn.prev { left: 1rem; }
+    .room-carousel-btn.next { right: 1rem; }
+
+    .room-carousel-count {
+      position: absolute;
+      left: 1rem;
+      bottom: 1rem;
+      z-index: 3;
+      padding: 0.25rem 0.7rem;
+      border: 1px solid rgba(138,172,204,0.22);
+      background: rgba(10,10,15,0.68);
+      color: var(--text-dim);
+      font-size: 0.62rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+
+    .room-carousel-dots {
+      position: absolute;
+      right: 1rem;
+      bottom: 1rem;
+      z-index: 3;
+      display: flex;
+      gap: 0.45rem;
+    }
+
+    .room-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      border: 1px solid rgba(138,172,204,0.35);
+      background: transparent;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .room-dot.active {
+      background: var(--accent-char);
+      border-color: var(--accent-char);
+    }
+
+    .room-img-caption {
+      margin-top: 0.7rem;
+      font-size: 0.62rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      opacity: 0.45;
+      text-align: right;
+    }
+
+    .room-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .room-desc {
+      font-size: 0.88rem;
+      color: var(--text-dim);
+      line-height: 2.15;
+    }
+
+    .room-desc p { margin-bottom: 1rem; }
+    .room-desc p:last-child { margin-bottom: 0; }
+
+    .room-group-label {
+      font-size: 0.58rem;
+      letter-spacing: 0.38em;
+      text-transform: uppercase;
+      color: var(--accent-char);
+      opacity: 0.7;
+      margin-bottom: 0.65rem;
+    }
+
+    .room-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+    }
+
+    .room-tag {
+      font-size: 0.72rem;
+      padding: 0.28rem 0.75rem;
+      border: 1px solid rgba(138,172,204,0.18);
+      color: var(--text-dim);
+      letter-spacing: 0.04em;
+      transition: border-color 0.25s, color 0.25s;
+    }
+
+    .room-tag:hover {
+      border-color: rgba(138,172,204,0.45);
+      color: var(--accent-char);
+    }
+
+    .room-tag--accent {
+      border-color: rgba(138,172,204,0.32);
+      color: var(--accent-char);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 3rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text-dim);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+    }
+
+    footer a {
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    footer a:hover { color: var(--accent); }
+
+    .footer-links { display: flex; gap: 2rem; }
+
+    /* ── MOBILE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { gap: 0.8rem 1.2rem; }
+      .nav-links a { font-size: 0.75rem; }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; align-items: flex-start; }
+      .nav-social { display: none; }
+      .nav-links { max-width: 72%; }
+      #char-hero { padding: 8rem 1.5rem 3.5rem; }
+      .char-hero-stats { gap: 1.8rem; }
+      .page-section { padding: 4rem 1.5rem; }
+      .profile-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .room-layout { grid-template-columns: 1fr; gap: 2rem; }
+      .room-carousel, .room-placeholder { min-height: 240px; }
+      .room-slide img { max-height: 420px; }
+      .dialogue-line { grid-template-columns: 4rem 1fr; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">eCLIPSe.Box_log</a>
+  <ul class="nav-links">
+    <li><a href="index.html#sojourner">Sojourner</a></li>
+    <li><a href="index.html#echos">Echos</a></li>
+    <li><a href="index.html#discography">Works</a></li>
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#faq">FAQ</a></li>
+    <li><a href="world.html">World</a></li>
+    <li><a href="fanworks.html">Fan Works</a></li>
+  </ul>
+  <div class="nav-social">
+    <a href="https://www.threads.com/@eclipse.box_log" target="_blank" rel="noopener noreferrer">Threads</a>
+    <a href="https://www.youtube.com/@eCLIPSe.box_log" target="_blank" rel="noopener noreferrer">YouTube</a>
+    <a href="https://www.instagram.com/eclipse.box_log/" target="_blank" rel="noopener noreferrer">IG</a>
+  </div>
+</nav>
+
+<!-- CHARACTER HERO -->
+<div id="char-hero">
+  <a href="index.html" class="back-link">← 返回首頁</a>
+  <p class="char-hero-tag">Dancer · Choreographer · eCLIPSe</p>
+  <h1 class="char-hero-name-zh">文曜熙</h1>
+  <p class="char-hero-namㄒe-en">Jons</p>
+  <p class="char-hero-codename">Shadow — 影之人</p>
+  <blockquote class="char-hero-quote">"Don't disturb me."</blockquote>
+  <div class="char-hero-stats">
+    <div class="hero-stat-item">
+      <span class="hero-stat-label">身高</span>
+      <span class="hero-stat-value">187 cm</span>
+    </div>
+    <div class="hero-stat-item">
+      <span class="hero-stat-label">MBTI</span>
+      <span class="hero-stat-value">INFJ</span>
+    </div>
+    <div class="hero-stat-item">
+      <span class="hero-stat-label">生日</span>
+      <span class="hero-stat-value">1 · 3</span>
+    </div>
+    <div class="hero-stat-item">
+      <span class="hero-stat-label">職位</span>
+      <span class="hero-stat-value">Dancer · Choreographer</span>
+    </div>
+    <div class="hero-stat-item">
+      <span class="hero-stat-label">象徵</span>
+      <span class="hero-stat-value">Shadow · Silence</span>
+    </div>
+    <div class="hero-stat-item">
+      <span class="hero-stat-label">人際邊界度</span>
+      <span class="hero-stat-value difficulty">☆☆☆☆☆☆</span>
+    </div>
+
+  </div>
+</div>
+
+<!-- PROFILE -->
+<section class="page-section" id="profile">
+  <p class="section-label">Profile</p>
+  <h2 class="section-title">人物檔案</h2>
+
+  <div class="profile-grid">
+    <div class="profile-bio">
+      <p>
+        文曜熙，藝名 Jons，eCLIPSe 的舞蹈擔當與編舞者。
+        他是組合裡最安靜，也最難被接近的存在。灰藍色眼睛、冷淡表情與精準到近乎非人的肢體控制，讓他像一道沉默的影子。
+      </p>
+
+      <p>
+        Jons 並不是沒有情緒。
+        他只是習慣把情緒、名字、語言與身分切成不同層，放在不同的位置。
+        對他來說，沉默不是空白，而是一種避免被誤讀的自我保護。
+      </p>
+
+      <p>
+        他厭倦被關注，也厭倦被他人用簡單標籤解釋。
+        舞台上的 Jons 可以精準、完整、完美；但舞台下的他，只想保留一點不被任何人命名的自己。
+      </p>
+
+      <p>
+        在舞台上，他是 eCLIPSe 的影。
+        在舞台之外，他像一條靠近海岸的自行車道：一邊連著工作，一邊通往逃離。
+      </p>
+    </div>
+
+    <div class="profile-traits">
+      <div>
+        <p class="trait-group-label">性格關鍵詞</p>
+        <div class="trait-tags">
+          <span class="trait-tag trait-tag--accent">沉默</span>
+          <span class="trait-tag trait-tag--accent">精準</span>
+          <span class="trait-tag trait-tag--accent">身份切割</span>
+          <span class="trait-tag">低噪</span>
+          <span class="trait-tag">觀察者</span>
+          <span class="trait-tag">距離感</span>
+        </div>
+      </div>
+
+      <div>
+        <p class="trait-group-label">舞台形象</p>
+        <div class="trait-tags">
+          <span class="trait-tag">主舞</span>
+          <span class="trait-tag">編舞</span>
+          <span class="trait-tag">影子形象</span>
+          <span class="trait-tag">冷感舞台</span>
+          <span class="trait-tag">精密控制</span>
+        </div>
+      </div>
+
+      <div>
+        <p class="trait-group-label">互動難點</p>
+        <div class="trait-tags">
+          <span class="trait-tag">不主動靠近</span>
+          <span class="trait-tag">討厭被追問</span>
+          <span class="trait-tag">反應極慢熱</span>
+          <span class="trait-tag">私領域極強</span>
+        </div>
+      </div>
+
+      <div>
+        <p class="trait-group-label">可能軟化的條件</p>
+        <div class="trait-tags">
+          <span class="trait-tag">低壓陪伴</span>
+          <span class="trait-tag">不要求表態</span>
+          <span class="trait-tag">尊重沉默</span>
+          <span class="trait-tag">理解他的感官邊界</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LIVING SPACE -->
+<section class="page-section" id="living-space">
+  <p class="section-label">Living Space</p>
+  <h2 class="section-title">私人空間<em> · </em><em>Room Profile</em></h2>
+
+  <div class="room-layout">
+
+    <!-- 圖片 carousel -->
+    <div>
+      <div class="room-img-wrap">
+        <div class="room-carousel" data-room-carousel>
+          <div class="room-slide active">
+            <img src="images/personal/J/room_j1.png" alt="曜熙的住處 01 · Rylan's Living Space" loading="lazy" />
+          </div>
+          <div class="room-slide">
+            <img src="images/personal/J/room_j2.png" alt="曜熙的工作間 02 · Rylan's Desk" loading="lazy" />
+          </div>
+          <div class="room-slide">
+            <img src="images/personal/J/room_j3.png" alt="曜熙的房間 03 · Rylan's dress room" loading="lazy" />
+          </div>
+
+          <div class="room-placeholder">
+            <div class="room-ph-icon"></div>
+            <span class="room-ph-text">Room · Pending</span>
+          </div>
+
+          <button class="room-carousel-btn prev" type="button" aria-label="上一張">‹</button>
+          <button class="room-carousel-btn next" type="button" aria-label="下一張">›</button>
+          <span class="room-carousel-count">01 / 04</span>
+          <div class="room-carousel-dots" aria-label="房間圖片切換">
+            <button class="room-dot active" type="button" aria-label="第 1 張"></button>
+            <button class="room-dot" type="button" aria-label="第 2 張"></button>
+            <button class="room-dot" type="button" aria-label="第 3 張"></button>
+          </div>
+        </div>
+      </div>
+      <p class="room-img-caption">Living Space · 季凌 / Rylan</p>
+    </div>
+
+    <!-- 文字側寫 -->
+    <div class="room-text">
+
+      <div class="room-desc">
+        <p>
+          Jons 的住處位於灣岸區與東濱區邊界，靠近海岸自行車道。
+          一邊是通往 LUMINA 的工作路線，另一邊是海岸、島，以及能暫時離開人群的方向。
+        </p>
+        <p>
+          空間裡幾乎沒有多餘物品。黑、白、灰構成低噪背景，降噪視聽室、練習筆記、簡單餐具與陽台海風，讓這裡更像一個暫時安全的邊界，而不是傳統意義上的家。
+        </p>
+        <p>
+          對 Jons 來說，住處不是歸屬。
+          它只是能讓他把外界音量調低、把舞台身分暫時卸下來的地方。
+          只要還能聽見海風，他就知道自己沒有完全被城市吞掉。
+        </p>
+      </div>
+
+      <div>
+        <p class="room-group-label">位置 · Location</p>
+        <div class="room-tags">
+          <span class="room-tag room-tag--accent">05 灣岸區</span>
+          <span class="room-tag room-tag--accent">07 東濱區邊界</span>
+          <span class="room-tag">海岸自行車道</span>
+          <span class="room-tag">工作與逃離之間</span>
+        </div>
+      </div>
+
+      <div>
+        <p class="room-group-label">色調 · Palette</p>
+        <div class="room-tags">
+          <span class="room-tag room-tag--accent">黑</span>
+          <span class="room-tag room-tag--accent">白</span>
+          <span class="room-tag room-tag--accent">灰</span>
+          <span class="room-tag">冷木色</span>
+          <span class="room-tag">低飽和藍灰</span>
+        </div>
+      </div>
+
+      <div>
+        <p class="room-group-label">空間特徵 · Space</p>
+        <div class="room-tags">
+          <span class="room-tag room-tag--accent">降噪視聽室</span>
+          <span class="room-tag">海景陽台</span>
+          <span class="room-tag">極簡收納</span>
+          <span class="room-tag">低照度光源</span>
+          <span class="room-tag">可獨處動線</span>
+        </div>
+      </div>
+
+      <div>
+        <p class="room-group-label">物件 · Objects</p>
+        <div class="room-tags">
+          <span class="room-tag room-tag--accent">無線耳機</span>
+          <span class="room-tag room-tag--accent">銀色舊打火機</span>
+          <span class="room-tag">編舞筆記</span>
+          <span class="room-tag">氣泡水</span>
+          <span class="room-tag">科幻懸疑 BD</span>
+          <span class="room-tag">自行車鑰匙</span>
+        </div>
+      </div>
+
+    </div>
+
+
+    </div>
+  </div>
+</section>
+
+<!-- DIALOGUE EXAMPLES -->
+<section class="page-section" id="dialogues">
+  <p class="section-label">Dialogue Archive</p>
+  <h2 class="section-title">個人對話範例</h2>
+
+  <div class="dialogue-list">
+
+
+
+    <div class="dialogue-card">
+      <p class="dialogue-scenario">場景 01 ・ 天台，風很大 · 夜晚</p>
+      <div class="dialogue-exchange">
+        <div class="dialogue-line npc">
+          <span class="dialogue-role">你</span>
+          <span class="dialogue-text">你常來這裡嗎？</span>
+        </div>
+        <div class="dialogue-line char">
+          <span class="dialogue-role">曜熙</span>
+          <span class="dialogue-text">…。</span>
+        </div>
+        <div class="dialogue-line npc">
+          <span class="dialogue-role">你</span>
+          <span class="dialogue-text">我好像每次找不到你，你都在高處。</span>
+        </div>
+        <div class="dialogue-line char">
+          <span class="dialogue-role">曜熙</span>
+          <span class="dialogue-text">回去吧。<br/>不重要。</span>
+        </div>
+      </div>
+    </div>
+
+        <div class="dialogue-card">
+      <p class="dialogue-scenario">場景 02 ・ 13F 練習室，solo 片段複盤</p>
+      <div class="dialogue-exchange">
+        <div class="dialogue-line npc">
+          <span class="dialogue-role">你</span>
+          <span class="dialogue-text">你剛剛那段看起來很像在生氣。</span>
+        </div>
+        <div class="dialogue-line char">
+          <span class="dialogue-role">曜熙</span>
+          <span class="dialogue-text">不是。</span>
+        </div>
+        <div class="dialogue-line npc">
+          <span class="dialogue-role">你</span>
+          <span class="dialogue-text">那是什麼？</span>
+        </div>
+        <div class="dialogue-line char">
+          <span class="dialogue-role">曜熙</span>
+          <span class="dialogue-text">重心偏右。<br/>(他轉身，沒有再說話。)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="dialogue-card">
+      <p class="dialogue-scenario">場景 03 ・ 海岸自行車道，排練後</p>
+      <div class="dialogue-exchange">
+        <div class="dialogue-line npc">
+          <span class="dialogue-role">你</span>
+          <span class="dialogue-text">騎車是為了運動嗎？</span>
+        </div>
+        <div class="dialogue-line char">
+          <span class="dialogue-role">曜熙</span>
+          <span class="dialogue-text">No.</span>
+        </div>
+        <div class="dialogue-line npc">
+          <span class="dialogue-role">你</span>
+          <span class="dialogue-text">那是為了什麼？</span>
+        </div>
+        <div class="dialogue-line char">
+          <span class="dialogue-role">曜熙</span>
+          <span class="dialogue-text">The sound will recede.<br/>人也是。</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SECRET FILES -->
+<section class="page-section" id="secrets">
+  <div class="secrets-header">
+    <p class="section-label" style="margin-bottom:0;">秘密檔案區</p>
+    <span class="secrets-clearance">Clearance Required</span>
+  </div>
+  <h2 class="section-title">Secret Files<em> ·</em> <em>機密資料</em></h2>
+
+  <div class="secrets-grid">
+
+    <div class="secret-file">
+      <p class="secret-file-level secret-file-level--open">● Open Access</p>
+      <p class="secret-file-title">編舞記錄 / Choreography Log</p>
+      <div class="secret-file-body">
+        主要工作：舞蹈設計、動線修正、solo 片段控制。<br/>
+        記錄方式：紙本筆記 / 節拍標記 / 符號化動作拆解。<br/>
+        團隊評價：「他不太說話，但給的東西都能用。」<br/>
+        備註：本人不喜歡解釋創作意圖。
+      </div>
+    </div>
+
+    <div class="secret-file">
+      <p class="secret-file-level secret-file-level--open">● Open Access</p>
+      <p class="secret-file-title">公開形象 / Public Image</p>
+      <div class="secret-file-body">
+        對外定位：eCLIPSe 主舞、編舞者、影子形象。<br/>
+        常見評價：冷淡、精準、神秘、距離感。<br/>
+        粉絲備註：「他不營業，但一上台就很可怕。」<br/>
+        形象穩定度：高。
+      </div>
+    </div>
+
+    <div class="secret-file">
+      <p class="secret-file-level secret-file-level--restricted">▲ Restricted</p>
+      <p class="secret-file-title">舊影片資料 / Old Crew Footage</p>
+      <div class="secret-file-body">
+        來源：███轉傳檔案。<br/>
+        地點推測：Los Angeles / Venice Beach 周邊。<br/>
+        內容：Popping / Krump / 塗鴉牆前影像。<br/>
+        關聯人物：<span class="redacted">Elliot / █████</span><br/>
+        備註：本人要求不要再提。
+      </div>
+    </div>
+
+    <div class="secret-file">
+      <p class="secret-file-level secret-file-level--restricted">▲ Restricted</p>
+      <p class="secret-file-title">姓名紀錄 / Identity Fragment</p>
+      <div class="secret-file-body">
+        舞台名：Jons。<br/>
+        中文名：文曜熙。<br/>
+        美國官方資料：<span class="redacted">Jonsson Wen</span><br/>
+        舊護照紀錄：<span class="redacted">██████</span><br/>
+        備註：不同名字對應不同時期，不建議直接詢問。
+      </div>
+    </div>
+
+    <div class="secret-file secret-file--locked">
+      <p class="secret-file-level secret-file-level--classified">■ Classified</p>
+      <p class="secret-file-title">過期護照 / Expired Passport Record</p>
+      <div class="secret-file-body">
+        出生地：<span class="redacted">█████████</span><br/>
+        舊名：<span class="redacted">████████████</span><br/>
+        關聯物件：銀色舊打火機 / 望遠鏡 / 白色長毛犬。<br/>
+        內容節錄：<span class="redacted">「這個名字不該出現在這裡。」</span><br/>
+        <br/>
+        <span class="redacted">██████<br/>
+        ██████</span>
+
+        <div class="secret-lock-overlay">
+          <span class="secret-lock-icon">🔒</span>
+          <span class="secret-lock-text">需要更高信任等級才能解鎖</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="secret-file secret-file--locked">
+      <p class="secret-file-level secret-file-level--classified">■ Classified</p>
+      <p class="secret-file-title">內部筆記 / Internal Note · Svenska</p>
+      <div class="secret-file-body">
+        語言層級：中文 / Engl███ <br/>
+        狀態：非公開。<br/>
+        第一行：<span class="redacted">「說英文的 Jonsson，是……」</span><br/>
+        <br/>
+        <span class="redacted">Sn██<br/>
+        █████████<br/>
+        那個你記得的人，正在沉睡。</span>
+
+        <div class="secret-lock-overlay">
+          <span class="secret-lock-icon">🔒</span>
+          <span class="secret-lock-text">需要更高信任等級才能解鎖</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 佔位 -->
+    <div class="secret-file" style="border-style:dashed;opacity:0.35;display:flex;align-items:center;justify-content:center;min-height:160px;">
+      <p style="font-size:0.75rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--text-dim);">+ 新增檔案</p>
+    </div>
+
+  </div>
+</section>
+<!-- FOOTER -->
+<footer>
+  <span>© 2026 eCLIPSe.Box-log · 文曜熙 / Jons</span>
+  <div class="footer-links">
+    <li><a href="index.html#echos">← Back</a></li>
+    <a href="https://www.threads.com/@eclipse.box_log" target="_blank" rel="noopener noreferrer">Threads</a>
+    <a href="https://www.youtube.com/@eCLIPSe.box_log" target="_blank" rel="noopener noreferrer">YouTube</a>
+    <a href="https://www.instagram.com/eclipse.box_log/" target="_blank" rel="noopener noreferrer">IG</a>
+  </div>
+</footer>
+
+<script>
+  // Living Space carousel
+  document.querySelectorAll('[data-room-carousel]').forEach(carousel => {
+    const slides = Array.from(carousel.querySelectorAll('.room-slide'));
+    const dots = Array.from(carousel.querySelectorAll('.room-dot'));
+    const prevBtn = carousel.querySelector('.room-carousel-btn.prev');
+    const nextBtn = carousel.querySelector('.room-carousel-btn.next');
+    const count = carousel.querySelector('.room-carousel-count');
+    const placeholder = carousel.querySelector('.room-placeholder');
+    let current = 0;
+
+    const pad = n => String(n).padStart(2, '0');
+
+    const showSlide = index => {
+      if (!slides.length) return;
+      current = (index + slides.length) % slides.length;
+      slides.forEach((slide, i) => slide.classList.toggle('active', i === current));
+      dots.forEach((dot, i) => dot.classList.toggle('active', i === current));
+      if (count) count.textContent = `${pad(current + 1)} / ${pad(slides.length)}`;
+    };
+
+    const updateMissingState = () => {
+      const activeImg = slides[current]?.querySelector('img');
+      const hasImage = activeImg && activeImg.complete && activeImg.naturalWidth > 0;
+      if (placeholder) placeholder.style.display = hasImage ? 'none' : 'flex';
+    };
+
+    slides.forEach((slide, index) => {
+      const img = slide.querySelector('img');
+      if (!img) return;
+
+      img.addEventListener('load', () => {
+        if (index === current) updateMissingState();
+      });
+
+      img.addEventListener('error', () => {
+        if (index === current) updateMissingState();
+      });
+    });
+
+    prevBtn?.addEventListener('click', () => {
+      showSlide(current - 1);
+      updateMissingState();
+    });
+
+    nextBtn?.addEventListener('click', () => {
+      showSlide(current + 1);
+      updateMissingState();
+    });
+
+    dots.forEach((dot, index) => {
+      dot.addEventListener('click', () => {
+        showSlide(index);
+        updateMissingState();
+      });
+    });
+
+    showSlide(0);
+    updateMissingState();
+  });
+
+  // Fade-in on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.dialogue-card, .secret-file, .profile-traits > div, .room-layout').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(16px)';
+    el.style.transition = 'opacity 0.55s ease, transform 0.55s ease';
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>

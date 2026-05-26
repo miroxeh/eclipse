@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>World — Psythex Lab</title>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --bg2: #0f0f1a;
+      --accent: #b89a6a;
+      --accent2: #7a6a9a;
+      --text: #e8e0d0;
+      --text-dim: #8a8090;
+      --border: rgba(184,154,106,0.18);
+      --card-bg: rgba(20,18,30,0.85);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Georgia', 'Noto Serif TC', serif;
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 4rem;
+      background: rgba(10,10,15,0.92);
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-size: 1.1rem;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: bold;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: clamp(0.9rem, 2vw, 2.5rem);
+      list-style: none;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+      white-space: nowrap;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+    .nav-links a.active { color: var(--accent); }
+
+    .nav-social {
+      display: flex;
+      gap: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .nav-social a {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      transition: color 0.3s;
+    }
+
+    .nav-social a:hover { color: var(--accent); }
+
+    /* ── HERO ── */
+    #world-hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 8rem 2rem 4rem;
+      background:
+        radial-gradient(ellipse at 30% 45%, rgba(122,106,154,0.14) 0%, transparent 62%),
+        radial-gradient(ellipse at 78% 65%, rgba(184,154,106,0.08) 0%, transparent 55%),
+        var(--bg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    #world-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          0deg, transparent, transparent 60px,
+          rgba(184,154,106,0.025) 60px, rgba(184,154,106,0.025) 61px
+        ),
+        repeating-linear-gradient(
+          90deg, transparent, transparent 80px,
+          rgba(122,106,154,0.018) 80px, rgba(122,106,154,0.018) 81px
+        );
+      pointer-events: none;
+    }
+
+    .hero-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 1.8rem;
+      position: relative;
+    }
+
+    .hero-title {
+      font-size: clamp(2.8rem, 7vw, 6rem);
+      font-weight: 300;
+      color: #fff;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.6rem;
+      line-height: 1.1;
+      position: relative;
+    }
+
+    .hero-title span { color: var(--accent); }
+
+    .hero-sub {
+      font-size: 0.88rem;
+      color: var(--text-dim);
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      margin-bottom: 2.5rem;
+      position: relative;
+    }
+
+    .divider {
+      width: 60px;
+      height: 1px;
+      background: var(--accent);
+      margin: 0 auto 2.5rem;
+      opacity: 0.4;
+      position: relative;
+    }
+
+    .hero-desc {
+      max-width: 560px;
+      font-size: 0.97rem;
+      color: var(--text-dim);
+      line-height: 2.2;
+      position: relative;
+    }
+
+    /* ── SHARED SECTION ── */
+    .world-section {
+      padding: 7rem 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      border-top: 1px solid var(--border);
+    }
+
+    .section-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.8rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 300;
+      color: #fff;
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.05em;
+    }
+
+    .section-title em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    /* ── CITY MAP ── */
+    .map-wrap {
+      position: relative;
+      width: 100%;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      background: var(--bg2);
+    }
+
+    .map-wrap img {
+      width: 100%;
+      height: auto;
+      display: block;
+      opacity: 0.88;
+      filter: saturate(0.75) brightness(0.88);
+      transition: opacity 0.4s, filter 0.4s;
+    }
+
+    .map-wrap:hover img {
+      opacity: 1;
+      filter: saturate(0.9) brightness(1);
+    }
+
+    .map-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 55%, rgba(10,10,15,0.55) 100%);
+      pointer-events: none;
+    }
+
+    /* placeholder shown when image is absent */
+    .map-placeholder {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.9rem;
+    }
+
+    .map-placeholder-line {
+      width: 36px;
+      height: 36px;
+      border: 1px solid rgba(184,154,106,0.22);
+    }
+
+    .map-placeholder-text {
+      font-size: 0.68rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      opacity: 0.35;
+    }
+
+    .map-caption {
+      margin-top: 1rem;
+      font-size: 0.7rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      text-align: right;
+      opacity: 0.5;
+    }
+
+    /* ── LOCATIONS ── */
+    .section-intro {
+      max-width: 640px;
+      color: var(--text-dim);
+      font-size: 0.95rem;
+      line-height: 2.1;
+      margin-bottom: 4rem;
+    }
+
+    .locations-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .loc-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 2.2rem 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .loc-card:hover {
+      border-color: rgba(184,154,106,0.45);
+      transform: translateY(-4px);
+    }
+
+    .loc-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent2), var(--accent));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s;
+    }
+
+    .loc-card:hover::before { transform: scaleX(1); }
+
+    .loc-code {
+      font-size: 0.58rem;
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 0.9rem;
+      opacity: 0.8;
+    }
+
+    .loc-name-en {
+      font-size: 1.08rem;
+      color: #fff;
+      letter-spacing: 0.08em;
+      font-weight: 300;
+      margin-bottom: 0.2rem;
+    }
+
+    .loc-name-zh {
+      font-size: 0.78rem;
+      color: var(--accent);
+      letter-spacing: 0.2em;
+      margin-bottom: 0.3rem;
+    }
+
+    .loc-tag {
+      font-size: 0.63rem;
+      letter-spacing: 0.18em;
+      color: var(--text-dim);
+      font-style: italic;
+      margin-bottom: 1.4rem;
+      padding-bottom: 1.2rem;
+      border-bottom: 1px solid rgba(184,154,106,0.1);
+    }
+
+    .loc-desc {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      line-height: 2;
+      margin-bottom: 1.5rem;
+    }
+
+    .loc-members {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .loc-member-tag {
+      font-size: 0.63rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.22rem 0.65rem;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+    }
+
+    .loc-member-tag--rylan  { border-color: rgba(138,172,204,0.3); color: #8aaccc; }
+    .loc-member-tag--elliot { border-color: rgba(184,154,106,0.35); color: var(--accent); }
+    .loc-member-tag--jons   { border-color: rgba(122,106,154,0.35); color: var(--accent2); }
+
+    /* ── MEMBER ROUTES ── */
+    .routes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+    }
+
+    .route-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 2.2rem 2rem;
+      position: relative;
+      transition: border-color 0.3s;
+    }
+
+    .route-card:hover { border-color: rgba(184,154,106,0.3); }
+
+    .route-char-tag {
+      font-size: 0.6rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      margin-bottom: 0.7rem;
+    }
+
+    .route-char-tag--rylan  { color: #8aaccc; }
+    .route-char-tag--elliot { color: var(--accent); }
+    .route-char-tag--jons   { color: var(--accent2); }
+
+    .route-char-name {
+      font-size: 1.15rem;
+      color: #fff;
+      font-weight: 300;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.25rem;
+    }
+
+    .route-char-en {
+      font-size: 0.77rem;
+      color: var(--text-dim);
+      letter-spacing: 0.15em;
+      margin-bottom: 1.6rem;
+      padding-bottom: 1.4rem;
+      border-bottom: 1px solid rgba(184,154,106,0.1);
+    }
+
+    .route-pattern-label {
+      font-size: 0.58rem;
+      letter-spacing: 0.38em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 0.9rem;
+      opacity: 0.65;
+    }
+
+    .route-path {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.35rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .route-node {
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+      padding: 0.22rem 0.6rem;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      white-space: nowrap;
+    }
+
+    .route-arrow {
+      font-size: 0.62rem;
+      color: var(--accent);
+      opacity: 0.45;
+    }
+
+    .route-note {
+      font-size: 0.83rem;
+      color: var(--text-dim);
+      line-height: 1.95;
+      font-style: italic;
+      padding-left: 1rem;
+      border-left: 1px solid rgba(184,154,106,0.2);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 3rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text-dim);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+    }
+
+    footer a {
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    footer a:hover { color: var(--accent); }
+
+    .footer-links { display: flex; gap: 2rem; }
+
+    /* ── MOBILE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { gap: 0.8rem 1.2rem; }
+      .nav-links a { font-size: 0.75rem; }
+    }
+
+    @media (max-width: 700px) {
+      nav { padding: 1rem 1.5rem; align-items: flex-start; }
+      .nav-social { display: none; }
+      .nav-links { max-width: 72%; }
+      .world-section { padding: 4rem 1.5rem; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">eCLIPSe.Box_log</a>
+  <ul class="nav-links">
+    <li><a href="index.html#sojourner">Sojourner</a></li>
+    <li><a href="index.html#echos">Echos</a></li>
+    <li><a href="index.html#discography">Works</a></li>
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#faq">FAQ</a></li>
+    <li><a href="world.html" class="active">World</a></li>
+    <li><a href="fanworks.html">Fan Works</a></li>
+  </ul>
+  <div class="nav-social">
+    <a href="https://www.threads.com/@eclipse.box_log" target="_blank" rel="noopener noreferrer">Threads</a>
+    <a href="https://www.youtube.com/@eCLIPSe.box_log" target="_blank" rel="noopener noreferrer">YouTube</a>
+    <a href="https://www.instagram.com/eclipse.box_log/" target="_blank" rel="noopener noreferrer">IG</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div id="world-hero">
+  <p class="hero-label">World Archive · eCLIPSe.Box-log</p>
+  <h1 class="hero-title">光與影的<span>城市</span></h1>
+  <p class="hero-sub">The Fictional Coordinates Behind the Virtual Stage</p>
+  <div class="divider"></div>
+  <p class="hero-desc">
+    eCLIPSe，他們透過音樂、影像、互動文本與社群回應被認識，也透過這座城市擁有自己的舞台、路線與生活座標。<br/>
+    這裡不是單純紀錄封閉的架空世界，而是虛擬偶像在光與影，數位與物理現實的狹縫中如何存在。
+  </p>
+</div>
+
+<!-- WORLD PREMISE -->
+<section class="world-section" id="world-premise">
+  <p class="section-label">World Premise</p>
+  <h2 class="section-title">這座城市是什麼<br/><em>Why This City Exists</em></h2>
+
+  <p class="section-intro">
+    這座城市，是承載他們生活痕跡的空間座標：舞台、公司、練習室、住處、後台通道、深夜路線，也記錄那些從未被說出口的情緒。
+  </p>
+
+  <div class="locations-grid">
+    <div class="loc-card">
+      <p class="loc-code">LAYER — 01</p>
+      <h3 class="loc-name-en">Stage</h3>
+      <p class="loc-name-zh">被看見的地方</p>
+      <p class="loc-tag">Public Image · 舞台形象</p>
+      <p class="loc-desc">
+        舞台、音樂、MV 與社群發文，是他們主動向世界展現自己的地方。這裡的光很亮，也最容易被記住。
+      </p>
+    </div>
+
+    <div class="loc-card">
+      <p class="loc-code">LAYER — 02</p>
+      <h3 class="loc-name-en">Backstage</h3>
+      <p class="loc-name-zh">不被完整看見的地方</p>
+      <p class="loc-tag">Private Tension · 後台暗面</p>
+      <p class="loc-desc">
+        練習室、後台通道、深夜路線與各自的住處，承載著那些不會出現在正式宣傳裡的疲憊、矛盾、防衛與選擇。
+      </p>
+    </div>
+
+    <div class="loc-card">
+      <p class="loc-code">LAYER — 03</p>
+      <h3 class="loc-name-en">Trace</h3>
+      <p class="loc-name-zh">現實中的痕跡</p>
+      <p class="loc-tag">Archive · 被記錄的存在</p>
+      <p class="loc-desc">
+        他們不是真人，卻也不再只是設定檔。當歌曲被發行、影像被觀看、角色被討論，這些回應都會成為影響世界的可能性。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- CITY MAP -->
+<section class="world-section" id="city-map">
+  <p class="section-label">City Map</p>
+  <h2 class="section-title">空間座標<br/><em>Location Index</em></h2>
+
+  <div class="map-wrap" id="map-wrap">
+    <img
+      src="images/world/MEITSU_MAP.png"
+      alt="eCLIPSe City Map"
+      loading="lazy"
+      onerror="
+        this.style.display='none';
+        document.getElementById('map-placeholder').style.display='flex';
+        this.parentElement.querySelector('.map-overlay').style.display='none';
+      "
+    />
+    <div class="map-overlay"></div>
+    <div class="map-placeholder" id="map-placeholder" style="display:none;">
+      <div class="map-placeholder-line"></div>
+      <p class="map-placeholder-text">City Map · Pending</p>
+    </div>
+  </div>
+  <p class="map-caption">Map · Psythex Lab World Archive · 2026</p>
+</section>
+
+<!-- LOCATIONS -->
+<section class="world-section" id="locations">
+  <p class="section-label">Known Spaces</p>
+  <h2 class="section-title">已知地點<br/><em>Known Spaces</em></h2>
+  <p class="section-intro">
+    偶像站在光裡，被認識、被喜歡、被記住，也被誤解。<br/>
+    但在光照不到的地方，仍然存在著無法被完整展現的矛盾、壓抑、防衛與選擇。<br/>
+    每一個地點，都像是一種情緒的容器：總部大樓、專屬樓層、錄音室、地下入口、住處、深夜路線與屋頂——它們不是單純的佈景，而是角色在光與影之間留下的空間痕跡，也可能成為理解他們、與他們互動時的切入口。
+  </p>
+
+  <div class="locations-grid">
+
+    <div class="loc-card">
+      <p class="loc-code">LOC — 01</p>
+      <h3 class="loc-name-en">LUMINA TOWER</h3>
+      <p class="loc-name-zh">光幕塔</p>
+      <p class="loc-tag">Cultural Headquarters · 文化娛樂總部</p>
+      <p class="loc-desc">
+        LUMINA GROUP 的文化娛樂總部，也是 LUMINA Entertainment 的核心據點。
+        這裡不是只為三位成員服務的偶像公司，而是一座複合式文化產業大樓：
+        經紀、音樂製作、視覺企劃、直播內容、周邊品牌與練習生訓練，都在同一棟垂直城市裡運作。
+      </p>
+      <div class="loc-members">
+        <span class="loc-member-tag loc-member-tag--rylan">Rylan</span>
+        <span class="loc-member-tag loc-member-tag--elliot">Elliot</span>
+        <span class="loc-member-tag loc-member-tag--jons">Jons</span>
+      </div>
+    </div>
+
+    <div class="loc-card">
+      <p class="loc-code">LOC — 02</p>
+      <h3 class="loc-name-en">eCLIPSe Floor</h3>
+      <p class="loc-name-zh">13F / 14F 專屬區域</p>
+      <p class="loc-tag">Training &amp; Holding Area · 專屬訓練與中繼層</p>
+      <p class="loc-desc">
+        13F 是 eCLIPSe 的專屬訓練創作層，14F 則是他們的中繼休息層。
+        這裡比低樓層更安靜，也更難被外人接近。鏡牆、練習室、臨時會議、休息沙發與深夜外送，
+        讓這兩層成為三人最常互相碰撞的地方。
+      </p>
+      <div class="loc-members">
+        <span class="loc-member-tag loc-member-tag--rylan">Rylan</span>
+        <span class="loc-member-tag loc-member-tag--elliot">Elliot</span>
+        <span class="loc-member-tag loc-member-tag--jons">Jons</span>
+      </div>
+    </div>
+
+    <div class="loc-card">
+      <p class="loc-code">LOC — 03</p>
+      <h3 class="loc-name-en">Recording Core</h3>
+      <p class="loc-name-zh">11F 錄音核心層</p>
+      <p class="loc-tag">Voice &amp; Control · 聲音與控制</p>
+      <p class="loc-desc">
+        11F 是大錄音室、混音室與 mastering 所在的核心樓層。
+        聲音在這裡被拆開、修正、重錄，也被逼近真正的情緒。
+        對 Rylan 來說，這裡是完美控制最容易失效的地方；對另外兩人來說，則是他們偶爾能打斷那份控制的地方。
+      </p>
+      <div class="loc-members">
+        <span class="loc-member-tag loc-member-tag--rylan">Rylan</span>
+        <span class="loc-member-tag loc-member-tag--elliot">Elliot</span>
+        <span class="loc-member-tag loc-member-tag--jons">Jons</span>
+      </div>
+    </div>
+
+    <div class="loc-card">
+      <p class="loc-code">LOC — 04</p>
+      <h3 class="loc-name-en">Stage Backdoor</h3>
+      <p class="loc-name-zh">B2 藝人專用入口</p>
+      <p class="loc-tag">Private Access · 地下動線</p>
+      <p class="loc-desc">
+        B2 連接地下停車場、保母車與藝人專用入口，是最少被公開看見的進出路線。
+        走進去之前是一個人，走出去之後是另一個名字。
+        這條動線見過最多種面孔：上台前的沉默、下班後的疲憊，以及只存在十秒鐘的真實表情。
+      </p>
+      <div class="loc-members">
+        <span class="loc-member-tag loc-member-tag--rylan">Rylan</span>
+        <span class="loc-member-tag loc-member-tag--elliot">Elliot</span>
+        <span class="loc-member-tag loc-member-tag--jons">Jons</span>
+      </div>
+    </div>
+
+    <div class="loc-card">
+      <p class="loc-code">LOC — 05</p>
+      <h3 class="loc-name-en">Living Spaces</h3>
+      <p class="loc-name-zh">各自的邊界</p>
+      <p class="loc-tag">Private Fortresses · 私密堡壘</p>
+      <p class="loc-desc">
+        三位成員各自擁有絕對私密的住處。
+        它們不是單純的生活空間，而是心理防禦的延伸：
+        有人用城市聲音掩蓋孤單，有人站在高處維持掌控，也有人把自己安放在工作與逃離之間的邊界。
+      </p>
+      <div class="loc-members">
+        <span class="loc-member-tag loc-member-tag--rylan">Rylan</span>
+        <span class="loc-member-tag loc-member-tag--elliot">Elliot</span>
+        <span class="loc-member-tag loc-member-tag--jons">Jons</span>
+      </div>
+    </div>
+
+    <div class="loc-card">
+      <p class="loc-code">LOC — 06</p>
+      <h3 class="loc-name-en">Night Route</h3>
+      <p class="loc-name-zh">深夜動線</p>
+      <p class="loc-tag">Neon, Rain, Exit · 凌晨的出口</p>
+      <p class="loc-desc">
+        LUMINA TOWER 外的便利商店、無人的天橋、雨後的柏油路與灣岸車流，
+        構成了訓練結束後的深夜動線。
+        這不是正式地點，卻最常暴露一個人真正的狀態：有人需要聲音，有人需要速度，有人只是需要暫時消失。
+      </p>
+      <div class="loc-members">
+        <span class="loc-member-tag loc-member-tag--elliot">Elliot</span>
+        <span class="loc-member-tag loc-member-tag--jons">Jons</span>
+        <span class="loc-member-tag loc-member-tag--rylan">Rylan</span>
+      </div>
+    </div>
+
+    <div class="loc-card">
+      <p class="loc-code">LOC — 07</p>
+      <h3 class="loc-name-en">Sky Garden / Rooftop</h3>
+      <p class="loc-name-zh">18F 天空花園 / 屋頂露台</p>
+      <p class="loc-tag">Threshold Space · 高處的邊界</p>
+      <p class="loc-desc">
+        18F 的 VIP Lounge 與 Showcase Salon 連接天空花園，再往上則是屋頂露台與設備區。
+        這裡既接近高層與展示，也接近風、夜色與暫時離開人群的可能。
+        說話的聲音容易被吹散，所以某些話即使說了，也像沒有留下紀錄。
+      </p>
+      <div class="loc-members">
+        <span class="loc-member-tag loc-member-tag--rylan">Rylan</span>
+        <span class="loc-member-tag loc-member-tag--elliot">Elliot</span>
+        <span class="loc-member-tag loc-member-tag--jons">Jons</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- RESIDENCE INDEX -->
+<section class="world-section" id="residence-index">
+  <p class="section-label">Residence Index</p>
+  <h2 class="section-title">私密堡壘<br/><em>Private Coordinates</em></h2>
+
+  <p class="section-intro">
+    住處是他們最不需要表演的地方，也是防衛最清楚的地方。<br/>
+    在這座城市裡，每個人的家都精準對應著他的生活慣性與心理邊界：
+    靠近人群、俯瞰城市，或停在工作與逃離之間。
+  </p>
+
+  <div class="locations-grid">
+
+    <div class="loc-card">
+      <p class="loc-code">HOME — E01</p>
+      <h3 class="loc-name-en">Elliot Residence</h3>
+      <p class="loc-name-zh">夏澄凡 · 東門 / 灣岸交界</p>
+      <p class="loc-tag">Neon Noise · 用城市聲音掩蓋孤單</p>
+      <p class="loc-desc">
+        位於 04 東門區與 05 灣岸區交界的高樓層精品公寓，距離 LUMINA TOWER 步行約十分鐘。
+        窗外是永不熄滅的霓虹與車流，室內堆滿包裹、球鞋、香水與生活碎片。
+        對 Elliot 來說，熱鬧不是裝飾，而是一種保護：只要城市還有聲音，孤單就不會太快滲出來。
+      </p>
+      <div class="loc-members">
+        <span class="loc-member-tag loc-member-tag--elliot">Elliot</span>
+      </div>
+    </div>
+
+    <div class="loc-card">
+      <p class="loc-code">HOME — R01</p>
+      <h3 class="loc-name-en">Rylan Residence</h3>
+      <p class="loc-name-zh">季凌 · 北嶺半山頂層</p>
+      <p class="loc-tag">Control Room · 俯瞰城市的秩序</p>
+      <p class="loc-desc">
+        位於 01 北嶺區半山的現代簡約頂層豪宅，大片落地窗能俯瞰整個明津灣。
+        私人書房、收納整齊的酒櫃、名錶收藏與精準的生活秩序，構成一座高高在上的控制室。
+        對 Rylan 來說，住處不是放鬆，而是確認一切仍在掌握之中的地方。
+      </p>
+      <div class="loc-members">
+        <span class="loc-member-tag loc-member-tag--rylan">Rylan</span>
+      </div>
+    </div>
+
+    <div class="loc-card">
+      <p class="loc-code">HOME — J01</p>
+      <h3 class="loc-name-en">Jons Residence</h3>
+      <p class="loc-name-zh">文曜熙 · 灣岸 / 東濱邊界</p>
+      <p class="loc-tag">Quiet Border · 工作與逃離之間</p>
+      <p class="loc-desc">
+        位於 05 灣岸區與 07 東濱區邊界的低調海景高層公寓，靠近海岸自行車道。
+        黑白灰極簡空間、降噪視聽室，以及能聽見海風的陽台，讓這裡像一道物理邊界：
+        一邊通往工作與 LUMINA，另一邊通往玄濱海岸、鳶島，以及可以暫時離開人群的方向。
+      </p>
+      <div class="loc-members">
+        <span class="loc-member-tag loc-member-tag--jons">Jons</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+
+<!-- MEMBER ROUTES -->
+<section class="world-section" id="member-routes">
+  <p class="section-label">Member Routes</p>
+  <h2 class="section-title">成員動線<br/><em>How They Move</em></h2>
+  <p class="section-intro">
+    同樣的城市，三條截然不同的路徑。移動的方式，洩露了一個人不願說出口的事情。
+  </p>
+
+  <div class="routes-grid">
+
+    <div class="route-card">
+      <p class="route-char-tag route-char-tag--rylan">Vocal · Leader · Lunar</p>
+      <h3 class="route-char-name">季凌</h3>
+      <p class="route-char-en">Rylan</p>
+      <p class="route-pattern-label">Daily Pattern</p>
+      <div class="route-path">
+        <span class="route-node">North Ridge</span>
+        <span class="route-arrow">→</span>
+        <span class="route-node">LM Agency</span>
+        <span class="route-arrow">→</span>
+        <span class="route-node">Recording Room</span>
+        <span class="route-arrow">→</span>
+        <span class="route-node">Residence</span>
+      </div>
+      <p class="route-note">
+        Rylan 的動線像排程表，從半山住處到公司，再到錄音室或練習室，幾乎沒有多餘繞路。
+        他住在能俯瞰城市的位置，像把整座港灣都收進一個可管理的畫面。
+        偶爾在夜晚的路上奔馳，偏離路線，是系統過熱後的暫時降溫。
+      </p>
+    </div>
+
+    <div class="route-card">
+      <p class="route-char-tag route-char-tag--elliot">Center · Solar</p>
+      <h3 class="route-char-name">夏澄凡</h3>
+      <p class="route-char-en">Elliot</p>
+      <p class="route-pattern-label">Typical Pattern</p>
+      <div class="route-path">
+        <span class="route-node">LUMINA Tower</span>
+        <span class="route-arrow">→</span>
+        <span class="route-node">East Gate</span>
+        <span class="route-arrow">→</span>
+        <span class="route-node">Bayfront</span>
+        <span class="route-arrow">→</span>
+        <span class="route-node">Residence</span>
+      </div>
+      <p class="route-note">
+        Elliot 的路線總是靠近聲音與人群：公司、攝影棚、後台、便利商店、霓虹街口。
+        他住得離 LUMINA 很近，像是隨時能回到舞台，也隨時能逃回城市噪音裡。
+        他的家不安靜，因為安靜太久，孤單就會開始有聲音。
+      </p>
+    </div>
+
+    <div class="route-card">
+      <p class="route-char-tag route-char-tag--jons">Dancer · Shadow</p>
+      <h3 class="route-char-name">文曜熙</h3>
+      <p class="route-char-en">Jons</p>
+      <p class="route-pattern-label">Known Pattern</p>
+      <div class="route-path">
+        <span class="route-node">Bayfront</span>
+        <span class="route-arrow">→</span>
+        <span class="route-node">Practice Room</span>
+        <span class="route-arrow">→</span>
+        <span class="route-node">Rooftop</span>
+        <span class="route-arrow">→</span>
+        <span class="route-node">Coastal Route</span>
+      </div>
+      <p class="route-note">
+        Jons 的路線總停在邊界：住處靠近海岸自行車道，一邊是工作，一邊是逃離。
+        他不像是在移動，更像是在避開噪音，尋找能讓自己保持精準與沉默的位置。
+        對他來說，家不是歸屬，只是暫時安全的邊界。
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2026 eCLIPSe.Box_log · World Archive</span>
+  <div class="footer-links">
+    <a href="index.html">← 返回首頁</a>
+    <a href="https://www.threads.com/@eclipse.box_log" target="_blank" rel="noopener noreferrer">Threads</a>
+    <a href="https://www.youtube.com/@eCLIPSe.box_log" target="_blank" rel="noopener noreferrer">YouTube</a>
+    <a href="https://www.instagram.com/eclipse.box_log/" target="_blank" rel="noopener noreferrer">IG</a>
+  </div>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.loc-card, .route-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(18px)';
+    el.style.transition = 'opacity 0.55s ease, transform 0.55s ease, border-color 0.3s';
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>
