@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fan Works — Psythex Lab</title>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --bg2: #0f0f1a;
+      --accent: #b89a6a;
+      --accent2: #7a6a9a;
+      --text: #e8e0d0;
+      --text-dim: #8a8090;
+      --border: rgba(184,154,106,0.18);
+      --card-bg: rgba(20,18,30,0.85);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Georgia', 'Noto Serif TC', serif;
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 4rem;
+      background: rgba(10,10,15,0.92);
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-size: 1.1rem;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: bold;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: clamp(0.9rem, 2vw, 2.5rem);
+      list-style: none;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+      white-space: nowrap;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+    .nav-links a.active { color: var(--accent); }
+
+    .nav-social {
+      display: flex;
+      gap: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .nav-social a {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      transition: color 0.3s;
+    }
+
+    .nav-social a:hover { color: var(--accent); }
+
+    /* ── HERO ── */
+    #fw-hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 8rem 2rem 4rem;
+      background:
+        radial-gradient(ellipse at 65% 35%, rgba(122,106,154,0.16) 0%, transparent 58%),
+        radial-gradient(ellipse at 25% 70%, rgba(184,154,106,0.09) 0%, transparent 52%),
+        var(--bg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    #fw-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          0deg, transparent, transparent 60px,
+          rgba(122,106,154,0.022) 60px, rgba(122,106,154,0.022) 61px
+        ),
+        repeating-linear-gradient(
+          90deg, transparent, transparent 80px,
+          rgba(184,154,106,0.018) 80px, rgba(184,154,106,0.018) 81px
+        );
+      pointer-events: none;
+    }
+
+    .hero-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 1.8rem;
+      position: relative;
+    }
+
+    .hero-title {
+      font-size: clamp(2.8rem, 7vw, 6rem);
+      font-weight: 300;
+      color: #fff;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.6rem;
+      line-height: 1.1;
+      position: relative;
+    }
+
+    .hero-title span { color: var(--accent); }
+
+    .hero-sub {
+      font-size: 0.88rem;
+      color: var(--text-dim);
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      margin-bottom: 2.5rem;
+      position: relative;
+    }
+
+    .divider {
+      width: 60px;
+      height: 1px;
+      background: var(--accent);
+      margin: 0 auto 2.5rem;
+      opacity: 0.4;
+      position: relative;
+    }
+
+    .hero-desc {
+      max-width: 560px;
+      font-size: 0.97rem;
+      color: var(--text-dim);
+      line-height: 2.2;
+      position: relative;
+    }
+
+    .hero-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-top: 2.2rem;
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(100,180,100,0.75);
+      border: 1px solid rgba(100,180,100,0.2);
+      padding: 0.35rem 1rem;
+      position: relative;
+    }
+
+    .hero-status::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(100,180,100,0.75);
+      flex-shrink: 0;
+    }
+
+    /* ── SHARED SECTION ── */
+    .fw-section {
+      padding: 7rem 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      border-top: 1px solid var(--border);
+    }
+
+    .section-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.8rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 300;
+      color: #fff;
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.05em;
+    }
+
+    .section-title em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    /* ── SUBMISSION INFO ── */
+    .submission-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .submission-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 2rem;
+      position: relative;
+      transition: border-color 0.3s;
+    }
+
+    .submission-card:hover { border-color: rgba(184,154,106,0.35); }
+
+    .submission-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px;
+      height: 100%;
+      background: var(--accent2);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .submission-card:hover::before { opacity: 0.6; }
+
+    .submission-card h3 {
+      font-size: 0.82rem;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .submission-card p,
+    .submission-card li {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      line-height: 2;
+    }
+
+    .submission-card ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .submission-card ul li::before {
+      content: '—';
+      color: var(--accent2);
+      margin-right: 0.6rem;
+      opacity: 0.6;
+    }
+
+    .submission-note {
+      margin-top: 2.5rem;
+      padding: 1.4rem 1.8rem;
+      border: 1px solid rgba(122,106,154,0.2);
+      background: rgba(122,106,154,0.04);
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      line-height: 2;
+    }
+
+    .submission-note strong {
+      color: var(--accent2);
+      font-weight: normal;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── GALLERY ── */
+    .filter-row {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 3.5rem;
+    }
+
+    .filter-btn {
+      font-family: inherit;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0.4rem 1.1rem;
+      border: 1px solid var(--border);
+      background: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      transition: border-color 0.25s, color 0.25s;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--accent);
+      color: var(--text);
+    }
+
+    .filter-btn.active {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* masonry columns */
+    .fw-grid {
+      columns: 3;
+      column-gap: 1rem;
+    }
+
+    .fw-item {
+      break-inside: avoid;
+      margin-bottom: 1rem;
+      overflow: hidden;
+    }
+
+    .fw-item.hidden { display: none; }
+
+    /* Fan works must preserve original image composition. */
+    .fw-img-wrap {
+      position: relative;
+      width: 100%;
+      min-height: 220px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .fw-img-wrap.ratio-portrait,
+    .fw-img-wrap.ratio-landscape,
+    .fw-img-wrap.ratio-square,
+    .fw-img-wrap.ratio-tall {
+      padding-top: 0;
+    }
+
+    .fw-img-wrap img {
+      position: static;
+      width: 100%;
+      height: auto;
+      max-height: none;
+      object-fit: contain;
+      display: block;
+      transition: transform 0.5s ease, opacity 0.3s;
+      z-index: 0;
+    }
+
+    .fw-img-wrap video,
+    .fw-video {
+      position: static;
+      width: 100%;
+      height: auto;
+      max-height: none;
+      object-fit: contain;
+      display: block;
+      z-index: 0;
+    }
+
+    .fw-img-wrap img.missing {
+      display: none;
+    }
+
+    .fw-item:hover .fw-img-wrap img:not(.missing) {
+      transform: scale(1.02);
+    }
+
+    .fw-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.7rem;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .fw-img-wrap.has-image {
+      min-height: 0;
+    }
+
+    .fw-img-wrap.has-image .fw-placeholder {
+      display: none;
+    }
+
+    .fw-ph-icon {
+      width: 32px;
+      height: 32px;
+      border: 1px solid var(--text-dim);
+      opacity: 0.18;
+    }
+
+    .fw-ph-text {
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      opacity: 0.35;
+    }
+
+    .fw-overlay {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      min-height: 45%;
+      background: linear-gradient(to top, rgba(10,10,15,0.86) 0%, rgba(10,10,15,0.45) 45%, transparent 100%);
+      opacity: 0;
+      transition: opacity 0.35s;
+      display: flex;
+      align-items: flex-end;
+      padding: 1rem 1.1rem;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .fw-item:hover .fw-overlay { opacity: 1; }
+
+    .fw-overlay-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    .fw-overlay-title {
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      color: var(--text);
+    }
+
+    .fw-overlay-artist {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      opacity: 0.85;
+    }
+
+    .fw-caption {
+      padding: 0.75rem 0.2rem 0.4rem;
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+    }
+
+    .fw-cat-tag {
+      font-size: 0.58rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      padding: 0.18rem 0.55rem;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .fw-cat-tag--rylan  { border-color: rgba(122,106,154,0.35); color: var(--accent2); }
+    .fw-cat-tag--jons   { border-color: rgba(138,172,204,0.3); color:  #8aaccc; }
+    .fw-cat-tag--elliot { border-color: rgba(184,154,106,0.35); color: var(--accent); }
+    .fw-cat-tag--group  { border-color: rgba(184,154,106,0.18); color: var(--text-dim); }
+    .fw-cat-tag--chibi     { border-color: rgba(180,120,120,0.3); color: rgba(200,150,140,0.85); }
+    .fw-cat-tag--comic  { border-color: rgba(150,184,150,0.3); color: rgba(160,200,160,0.85); }
+
+    .fw-caption-text { min-width: 0; }
+
+    .fw-title-text {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 3rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text-dim);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+    }
+
+    footer a {
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    footer a:hover { color: var(--accent); }
+
+    .footer-links { display: flex; gap: 2rem; }
+
+    /* ── MOBILE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { gap: 0.8rem 1.2rem; }
+      .nav-links a { font-size: 0.75rem; }
+    }
+
+    @media (max-width: 700px) {
+      nav { padding: 1rem 1.5rem; align-items: flex-start; }
+      .nav-social { display: none; }
+      .nav-links { max-width: 72%; }
+      .fw-section { padding: 4rem 1.5rem; }
+      .fw-grid { columns: 2; column-gap: 0.6rem; }
+      .fw-item { margin-bottom: 0.6rem; }
+      .fw-img-wrap { min-height: 180px; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">Psythex Lab</a>
+  <ul class="nav-links">
+    <li><a href="index.html#sojourner">Sojourner</a></li>
+    <li><a href="index.html#echos">Echos</a></li>
+    <li><a href="index.html#discography">Works</a></li>
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#faq">FAQ</a></li>
+    <li><a href="world.html">World</a></li>
+    <li><a href="fanworks.html" class="active">Fan Works</a></li>
+  </ul>
+  <div class="nav-social">
+    <a href="#" target="_blank">Threads</a>
+    <a href="#" target="_blank">Discord</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div id="fw-hero">
+  <p class="hero-label">Fan Works Archive · Psythex Lab</p>
+  <h1 class="hero-title">你們<span>看見的</span>他們</h1>
+  <p class="hero-sub">A Gallery of Interpretations</p>
+  <div class="divider"></div>
+  <p class="hero-desc">
+    每一幅創作，都是一種詮釋；每一種詮釋，都讓這個世界多了一層厚度。<br/>
+    這裡展示的，是來自社群的目光——那些被你們捕捉到的光與影。
+  </p>
+  <span class="hero-status">Submissions Open</span>
+</div>
+
+<!-- SUBMISSION INFO -->
+<section class="fw-section" id="submission">
+  <p class="section-label">Submission Info</p>
+  <h2 class="section-title">收錄說明<br/><em>How to Submit</em></h2>
+
+  <div class="submission-grid">
+    <div class="submission-card">
+      <h3>作品類型</h3>
+      <ul>
+        <li>數位插畫、傳統媒材掃描</li>
+        <li>漫畫分鏡、單格圖</li>
+        <li>Q版、頭像、表情包</li>
+        <li>非正式 AU 設定圖</li>
+        <li>文字創作（附圖為主）</li>
+      </ul>
+    </div>
+
+    <div class="submission-card">
+      <h3>內容規範</h3>
+      <ul>
+        <li>請維持角色設定一致性</li>
+        <li>明確暴力或成人內容不予收錄</li>
+        <li>AU 作品請標明設定背景</li>
+        <li>Chibi / 非正式風格歡迎</li>
+      </ul>
+    </div>
+
+    <div class="submission-card">
+      <h3>投稿方式</h3>
+      <ul>
+        <li>加入 Discord 社群</li>
+        <li>前往 #fanworks 頻道</li>
+        <li>附上作品圖片與標題</li>
+        <li>附上作者名稱及原作連結</li>
+      </ul>
+    </div>
+
+    <div class="submission-card">
+      <h3>版權聲明</h3>
+      <ul>
+        <li>著作權歸原創作者所有</li>
+        <li>展示不代表任何商業授權</li>
+        <li>轉載請標明原作者</li>
+        <li>如需下架請聯繫管理員</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="submission-note">
+    <strong>注意事項 ·</strong> 投稿即視為同意在本頁面展示。若您的作品已在此展示但希望移除，請於 Discord 聯繫管理員，我們將在 48 小時內處理。
+  </p>
+</section>
+
+<!-- GALLERY -->
+<section class="fw-section" id="gallery">
+  <p class="section-label">Gallery</p>
+  <h2 class="section-title">創作典藏<br/><em>Fan Works Collection</em></h2>
+
+  <div class="filter-row">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="rylan">Rylan</button>
+    <button class="filter-btn" data-filter="jons">Jons</button>
+    <button class="filter-btn" data-filter="elliot">Elliot</button>
+    <button class="filter-btn" data-filter="group">Group</button>
+    <button class="filter-btn" data-filter="chibi">Chibi</button>
+    <button class="filter-btn" data-filter="comic">Comic</button>
+  </div>
+
+  <div class="fw-grid" id="fw-grid">
+
+    <figure class="fw-item" data-cat="rylan">
+      <div class="fw-img-wrap ratio-portrait">
+        <img src="images/works/ita_r.jpg" alt="Fan Work 01 · Rylan" loading="lazy" />
+        <div class="fw-placeholder"><div class="fw-ph-icon"></div><span class="fw-ph-text">Rylan · 01</span></div>
+        <div class="fw-overlay"><div class="fw-overlay-inner"><span class="fw-overlay-title">月光之下</span><span class="fw-overlay-artist">from Ita</span></div></div>
+      </div>
+      <figcaption class="fw-caption"><span class="fw-cat-tag fw-cat-tag--rylan">Rylan</span><div class="fw-caption-text"><p class="fw-title-text">月光之下 · Under Moonlight</p></div></figcaption>
+    </figure>
+
+    <figure class="fw-item" data-cat="jons">
+      <div class="fw-img-wrap ratio-tall">
+        <img src="images/works/ita_j.jpg" alt="Fan Work 02 · Elliot" loading="lazy" />
+        <div class="fw-placeholder"><div class="fw-ph-icon"></div><span class="fw-ph-text">Jons · 01</span></div>
+        <div class="fw-overlay"><div class="fw-overlay-inner"><span class="fw-overlay-title">冰山之上</span><span class="fw-overlay-artist">from Ita</span></div></div>
+      </div>
+      <figcaption class="fw-caption"><span class="fw-cat-tag fw-cat-tag--jons">Jons</span><div class="fw-caption-text"><p class="fw-title-text">冰山之上 · Above the Iceberg</p></div></figcaption>
+    </figure>
+
+    <figure class="fw-item" data-cat="elliot">
+      <div class="fw-img-wrap ratio-landscape">
+        <img src="images/works/ita_e.jpg" alt="Fan Work 03 · Jons" loading="lazy" />
+        <div class="fw-placeholder"><div class="fw-ph-icon"></div><span class="fw-ph-text">Elliot · 01</span></div>
+        <div class="fw-overlay"><div class="fw-overlay-inner"><span class="fw-overlay-title">笑容之中</span><span class="fw-overlay-artist">from Ita</span></div></div>
+      </div>
+      <figcaption class="fw-caption"><span class="fw-cat-tag fw-cat-tag--elliot">Elliot</span><div class="fw-caption-text"><p class="fw-title-text">笑容之中 · Between Smile</p></div></figcaption>
+    </figure>
+
+    <figure class="fw-item" data-cat="rylan">
+      <div class="fw-img-wrap ratio-tall">
+        <img src="images/works/snake_R.jpg" alt="Fan Work 09 · Jons" loading="lazy" />
+        <div class="fw-placeholder"><div class="fw-ph-icon"></div><span class="fw-ph-text">Jons · 09</span></div>
+        <div class="fw-overlay"><div class="fw-overlay-inner"><span class="fw-overlay-title">夜行</span><span class="fw-overlay-artist">from snack8660</span></div></div>
+      </div>
+      <figcaption class="fw-caption"><span class="fw-cat-tag fw-cat-tag--rylan">Rylan</span><div class="fw-caption-text"><p class="fw-title-text">夜行 · Night Walk</p></div></figcaption>
+    </figure>
+
+    <figure class="fw-item" data-cat="group">
+      <div class="fw-img-wrap ratio-landscape">
+        <img src="images/works/berry4649_1.jpg" alt="Fan Work 04 · Group" loading="lazy" />
+        <div class="fw-placeholder"><div class="fw-ph-icon"></div><span class="fw-ph-text">Group · 04</span></div>
+        <div class="fw-overlay"><div class="fw-overlay-inner"><span class="fw-overlay-title">光與影</span><span class="fw-overlay-artist">from berry4649</span></div></div>
+      </div>
+      <figcaption class="fw-caption"><span class="fw-cat-tag fw-cat-tag--group">Group</span><div class="fw-caption-text"><p class="fw-title-text">光與影 · Light &amp; Shadow</p></div></figcaption>
+    </figure>
+
+    <figure class="fw-item" data-cat="comic">
+      <div class="fw-img-wrap ratio-portrait">
+        <img src="images/works/comic_l_r.jpg" alt="Fan Work 08 · Elliot" loading="lazy" />
+        <div class="fw-placeholder"><div class="fw-ph-icon"></div><span class="fw-ph-text">Elliot · 08</span></div>
+        <div class="fw-overlay"><div class="fw-overlay-inner"><span class="fw-overlay-title">Solar</span><span class="fw-overlay-artist">小短漫</span></div></div>
+      </div>
+      <figcaption class="fw-caption"><span class="fw-cat-tag fw-cat-tag--comic">Rylan</span><div class="fw-caption-text"><p class="fw-title-text">戀愛觀篇</p></div></figcaption>
+    </figure>
+
+    <figure class="fw-item" data-cat="comic">
+      <div class="fw-img-wrap ratio-portrait">
+        <img src="images/works/comic_n_r.jpg" alt="Fan Work 08 · Elliot" loading="lazy" />
+        <div class="fw-placeholder"><div class="fw-ph-icon"></div><span class="fw-ph-text">Elliot · 08</span></div>
+        <div class="fw-overlay"><div class="fw-overlay-inner"><span class="fw-overlay-title">Solar</span><span class="fw-overlay-artist">小短漫</span></div></div>
+      </div>
+      <figcaption class="fw-caption"><span class="fw-cat-tag fw-cat-tag--comic">Comic</span><div class="fw-caption-text"><p class="fw-title-text">新年紅包篇</p></div></figcaption>
+    </figure>
+
+    <figure class="fw-item" data-cat="rylan">
+      <div class="fw-img-wrap ratio-square">
+        <img src="images/works/Mei_r.jpg" alt="Fan Work 05 · Rylan" loading="lazy" />
+        <div class="fw-placeholder"><div class="fw-ph-icon"></div><span class="fw-ph-text">Rylan · 05</span></div>
+        <div class="fw-overlay"><div class="fw-overlay-inner"><span class="fw-overlay-title">冰山之上</span><span class="fw-overlay-artist">from Mei</span></div></div>
+      </div>
+      <figcaption class="fw-caption"><span class="fw-cat-tag fw-cat-tag--rylan">Rylan</span><div class="fw-caption-text"><p class="fw-title-text">冰山之上 · Above the Iceberg</p></div></figcaption>
+    </figure>
+
+    <figure class="fw-item" data-cat="jons">
+      <div class="fw-img-wrap ratio-portrait">
+        <img src="images/works/Mei_j.jpg" alt="Fan Work 06 · Chibi" loading="lazy" />
+        <div class="fw-placeholder"><div class="fw-ph-icon"></div><span class="fw-ph-text">Chibi · 06</span></div>
+        <div class="fw-overlay"><div class="fw-overlay-inner"><span class="fw-overlay-title">Q版三人組</span><span class="fw-overlay-artist">from Mei</span></div></div>
+      </div>
+      <figcaption class="fw-caption"><span class="fw-cat-tag fw-cat-tag--jons">Jons</span><div class="fw-caption-text"><p class="fw-title-text">Q版三人組 · Chibi Eclipse</p></div></figcaption>
+    </figure>
+
+    <figure class="fw-item" data-cat="elliot">
+      <div class="fw-img-wrap ratio-landscape">
+        <img src="images/works/Mei_e.jpg" alt="Fan Work 07 · AU" loading="lazy" />
+        <div class="fw-placeholder"><div class="fw-ph-icon"></div><span class="fw-ph-text">AU · 07</span></div>
+        <div class="fw-overlay"><div class="fw-overlay-inner"><span class="fw-overlay-title">深夜咖啡館</span><span class="fw-overlay-artist">from Mei</span></div></div>
+      </div>
+      <figcaption class="fw-caption"><span class="fw-cat-tag fw-cat-tag--elliot">Elliot</span><div class="fw-caption-text"><p class="fw-title-text">深夜咖啡館 · Late Night Café AU</p></div></figcaption>
+    </figure>
+
+    <figure class="fw-item" data-cat="group">
+      <div class="fw-img-wrap ratio-portrait">
+        <img src="images/works/berry4649_2.jpg" alt="Fan Work 08 · Elliot" loading="lazy" />
+        <div class="fw-placeholder"><div class="fw-ph-icon"></div><span class="fw-ph-text">Elliot · 08</span></div>
+        <div class="fw-overlay"><div class="fw-overlay-inner"><span class="fw-overlay-title">Solar</span><span class="fw-overlay-artist">from berry4649</span></div></div>
+      </div>
+      <figcaption class="fw-caption"><span class="fw-cat-tag fw-cat-tag--group">Group</span><div class="fw-caption-text"><p class="fw-title-text">Solar</p></div></figcaption>
+    </figure>
+
+
+
+    <figure class="fw-item" data-cat="group">
+      <div class="fw-img-wrap ratio-portrait">
+        <img src="images/works/snack8660_1.jpg" alt="Fan Work 08 · Elliot" loading="lazy" />
+        <div class="fw-placeholder"><div class="fw-ph-icon"></div><span class="fw-ph-text">Elliot · 08</span></div>
+        <div class="fw-overlay"><div class="fw-overlay-inner"><span class="fw-overlay-title">Solar</span><span class="fw-overlay-artist">from snack8660</span></div></div>
+      </div>
+      <figcaption class="fw-caption"><span class="fw-cat-tag fw-cat-tag--group">Group</span><div class="fw-caption-text"><p class="fw-title-text">Solar</p></div></figcaption>
+    </figure>
+
+    <figure class="fw-item" data-cat="group">
+      <div class="fw-img-wrap ratio-portrait">
+        <img src="images/works/album_1.png" alt="Fan Work 08 · Elliot" loading="lazy" />
+        <div class="fw-placeholder"><div class="fw-ph-icon"></div><span class="fw-ph-text">Elliot · 08</span></div>
+        <div class="fw-overlay"><div class="fw-overlay-inner"><span class="fw-overlay-title">Solar</span><span class="fw-overlay-artist">Album cover</span></div></div>
+      </div>
+      <figcaption class="fw-caption"><span class="fw-cat-tag fw-cat-tag--group">Group</span><div class="fw-caption-text"><p class="fw-title-text">Plastic Crown</p></div></figcaption>
+    </figure>
+
+    <figure class="fw-item" data-cat="comic">
+      <div class="fw-img-wrap ratio-portrait">
+        <img src="images/works/comic_l_j.jpg" alt="Fan Work 08 · Elliot" loading="lazy" />
+        <div class="fw-placeholder"><div class="fw-ph-icon"></div><span class="fw-ph-text">Elliot · 08</span></div>
+        <div class="fw-overlay"><div class="fw-overlay-inner"><span class="fw-overlay-title">Solar</span><span class="fw-overlay-artist">小短漫</span></div></div>
+      </div>
+      <figcaption class="fw-caption"><span class="fw-cat-tag fw-cat-tag--comic">Comic</span><div class="fw-caption-text"><p class="fw-title-text">戀愛觀篇</p></div></figcaption>
+    </figure>
+
+
+    <figure class="fw-item" data-cat="comic">
+      <div class="fw-img-wrap ratio-portrait">
+        <img src="images/works/comic_n_j.jpg" alt="Fan Work 08 · Elliot" loading="lazy" />
+        <div class="fw-placeholder"><div class="fw-ph-icon"></div><span class="fw-ph-text">Elliot · 08</span></div>
+        <div class="fw-overlay"><div class="fw-overlay-inner"><span class="fw-overlay-title">Solar</span><span class="fw-overlay-artist">小短漫</span></div></div>
+      </div>
+      <figcaption class="fw-caption"><span class="fw-cat-tag fw-cat-tag--comic">Comic</span><div class="fw-caption-text"><p class="fw-title-text">新年紅包篇</p></div></figcaption>
+    </figure>
+
+
+
+
+    <figure class="fw-item" data-cat="chibi">
+      <div class="fw-img-wrap ratio-portrait has-image">
+        <video
+          src="images/works/1_1.mp4"
+          controls
+          muted
+          playsinline
+          preload="metadata"
+          class="fw-video"
+        ></video>
+        <div class="fw-placeholder"><div class="fw-ph-icon"></div><span class="fw-ph-text">Group · 10</span></div>
+        <div class="fw-overlay"><div class="fw-overlay-inner"><span class="fw-overlay-title">eCLIPSe</span><span class="fw-overlay-artist">from 慕寰</span></div></div>
+      </div>
+      <figcaption class="fw-caption"><span class="fw-cat-tag fw-cat-tag--chibi">Chibi</span><div class="fw-caption-text"><p class="fw-title-text">eCLIPSe</p></div></figcaption>
+    </figure>
+
+
+
+    <figure class="fw-item" data-cat="chibi">
+      <div class="fw-img-wrap ratio-square has-image">
+        <video
+          src="images/works/1_2.mp4"
+          controls
+          muted
+          playsinline
+          preload="metadata"
+          class="fw-video"
+        ></video>
+        <div class="fw-placeholder"><div class="fw-ph-icon"></div><span class="fw-ph-text">Chibi · 11</span></div>
+        <div class="fw-overlay"><div class="fw-overlay-inner"><span class="fw-overlay-title">高校 AU</span><span class="fw-overlay-artist">from 慕寰</span></div></div>
+      </div>
+      <figcaption class="fw-caption"><span class="fw-cat-tag fw-cat-tag--chibi">Chibi</span><div class="fw-caption-text"><p class="fw-title-text">高校 · School AU</p></div></figcaption>
+    </figure>
+
+    <figure class="fw-item" data-cat="chibi">
+      <div class="fw-img-wrap ratio-landscape has-image">
+        <video
+          src="images/works/1_3.mp4"
+          controls
+          muted
+          playsinline
+          preload="metadata"
+          class="fw-video"
+        ></video>
+        <div class="fw-placeholder"><div class="fw-ph-icon"></div><span class="fw-ph-text">Chibi · 12</span></div>
+        <div class="fw-overlay"><div class="fw-overlay-inner"><span class="fw-overlay-title">節日版</span><span class="fw-overlay-artist">from 慕寰</span></div></div>
+      </div>
+      <figcaption class="fw-caption"><span class="fw-cat-tag fw-cat-tag--chibi">Chibi</span><div class="fw-caption-text"><p class="fw-title-text">節日版 · Holiday Chibi</p></div></figcaption>
+    </figure>
+
+    <figure class="fw-item" data-cat="rylan">
+      <div class="fw-img-wrap ratio-portrait">
+        <img src="images/works/muxihana_r.jpg" alt="Fan Work 08 · Elliot" loading="lazy" />
+        <div class="fw-placeholder"><div class="fw-ph-icon"></div><span class="fw-ph-text">Elliot · 08</span></div>
+        <div class="fw-overlay"><div class="fw-overlay-inner"><span class="fw-overlay-title">Solar</span><span class="fw-overlay-artist">from 慕兮</span></div></div>
+      </div>
+      <figcaption class="fw-caption"><span class="fw-cat-tag fw-cat-tag--rylan">Elliot</span><div class="fw-caption-text"><p class="fw-title-text">Solar</p></div></figcaption>
+    </figure>
+
+
+
+    <figure class="fw-item" data-cat="jons">
+      <div class="fw-img-wrap ratio-portrait">
+        <img src="images/works/muxihana_j.jpg" alt="Fan Work 08 · Elliot" loading="lazy" />
+        <div class="fw-placeholder"><div class="fw-ph-icon"></div><span class="fw-ph-text">Elliot · 08</span></div>
+        <div class="fw-overlay"><div class="fw-overlay-inner"><span class="fw-overlay-title">Solar</span><span class="fw-overlay-artist">from 慕兮</span></div></div>
+      </div>
+      <figcaption class="fw-caption"><span class="fw-cat-tag fw-cat-tag--jons">Elliot</span><div class="fw-caption-text"><p class="fw-title-text">Solar</p></div></figcaption>
+    </figure>
+
+    <figure class="fw-item" data-cat="elliot">
+      <div class="fw-img-wrap ratio-portrait">
+        <img src="images/works/muxihana_e.jpg" alt="Fan Work 08 · Elliot" loading="lazy" />
+        <div class="fw-placeholder"><div class="fw-ph-icon"></div><span class="fw-ph-text">Elliot · 08</span></div>
+        <div class="fw-overlay"><div class="fw-overlay-inner"><span class="fw-overlay-title">Solar</span><span class="fw-overlay-artist">from 慕兮</span></div></div>
+      </div>
+      <figcaption class="fw-caption"><span class="fw-cat-tag fw-cat-tag--elliot">Elliot</span><div class="fw-caption-text"><p class="fw-title-text">Solar</p></div></figcaption>
+    </figure>
+
+    <figure class="fw-item" data-cat="comic">
+      <div class="fw-img-wrap ratio-portrait">
+        <img src="images/works/comic_l_e.jpg" alt="Fan Work 08 · Elliot" loading="lazy" />
+        <div class="fw-placeholder"><div class="fw-ph-icon"></div><span class="fw-ph-text">Elliot · 08</span></div>
+        <div class="fw-overlay"><div class="fw-overlay-inner"><span class="fw-overlay-title">Solar</span><span class="fw-overlay-artist">小短漫</span></div></div>
+      </div>
+      <figcaption class="fw-caption"><span class="fw-cat-tag fw-cat-tag--comic">Comic</span><div class="fw-caption-text"><p class="fw-title-text">戀愛觀篇</p></div></figcaption>
+    </figure>
+
+    <figure class="fw-item" data-cat="comic">
+      <div class="fw-img-wrap ratio-portrait">
+        <img src="images/works/comic_n_e.jpg" alt="Fan Work 08 · Elliot" loading="lazy" />
+        <div class="fw-placeholder"><div class="fw-ph-icon"></div><span class="fw-ph-text">Elliot · 08</span></div>
+        <div class="fw-overlay"><div class="fw-overlay-inner"><span class="fw-overlay-title">Solar</span><span class="fw-overlay-artist">小短漫</span></div></div>
+      </div>
+      <figcaption class="fw-caption"><span class="fw-cat-tag fw-cat-tag--comic">Comic</span><div class="fw-caption-text"><p class="fw-title-text">新年紅包篇</p></div></figcaption>
+    </figure>
+
+    
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2026 Psythex Lab · Fan Works Archive</span>
+  <div class="footer-links">
+    <a href="index.html">← 返回首頁</a>
+    <a href="#">Threads</a>
+    <a href="#">Discord</a>
+  </div>
+</footer>
+
+<script>
+  // Filter
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      document.querySelectorAll('.fw-item').forEach(item => {
+        const match = filter === 'all' || item.dataset.cat === filter;
+        item.classList.toggle('hidden', !match);
+      });
+    });
+  });
+
+  // Preserve image proportions: show the original artwork without cropping.
+  document.querySelectorAll('.fw-img-wrap img').forEach(img => {
+    const wrap = img.closest('.fw-img-wrap');
+
+    const markLoaded = () => {
+      wrap.classList.add('has-image');
+      img.classList.remove('missing');
+    };
+
+    const markMissing = () => {
+      wrap.classList.remove('has-image');
+      img.classList.add('missing');
+    };
+
+    if (img.complete) {
+      img.naturalWidth > 0 ? markLoaded() : markMissing();
+    }
+
+    img.addEventListener('load', markLoaded);
+    img.addEventListener('error', markMissing);
+  });
+
+  // Fade-in on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.06 });
+
+  document.querySelectorAll('.fw-item, .submission-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(16px)';
+    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>
