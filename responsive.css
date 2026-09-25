@@ -1,0 +1,93 @@
+/* Shared layout rules for all current pages. */
+:root { --page-gutter: clamp(1rem, 4vw, 3rem); --nav-height: 5rem; }
+html { scroll-padding-top: calc(var(--nav-height) + 1rem); }
+body { overflow-wrap: anywhere; }
+nav {
+  position: sticky;
+  padding: 0.65rem var(--page-gutter);
+  gap: 1rem;
+}
+.nav-logo { font-size: clamp(0.85rem, 1.4vw, 1.1rem); }
+.nav-links { min-width: 0; gap: 0.25rem 1rem; }
+.nav-links a, .nav-social a, .footer-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.nav-social { gap: 0.75rem; }
+.nav-toggle { display: none; }
+section, .page-section, .world-section, .fw-section {
+  width: 100%;
+  padding: clamp(3rem, 7vw, 7rem) var(--page-gutter);
+}
+#hero { min-height: calc(100svh - var(--nav-height)); padding: 4rem var(--page-gutter); }
+#char-hero { min-height: 65svh; padding: 4rem var(--page-gutter); }
+.hero-title { font-size: clamp(2rem, 6vw, 5rem); }
+.hero-label, .section-label, .char-hero-tag { letter-spacing: 0.2em; }
+.sojourner-grid, .submission-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); }
+.characters-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
+.support-grid, .secrets-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); }
+.locations-grid, .routes-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); }
+.profile-grid { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); }
+.room-layout { grid-template-columns: minmax(0, 5fr) minmax(0, 4fr); }
+.disco-layout { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+:is(.profile-grid, .room-layout, .disco-layout, .characters-grid, .support-grid) > * { min-width: 0; }
+.char-card, .sojourner-card, .support-card, .submission-card, .loc-card, .route-card,
+.dialogue-card, .secret-file { padding: clamp(1.1rem, 3vw, 2rem); }
+.secrets-header, .char-stats, .footer-links { flex-wrap: wrap; }
+.char-hero-stats { gap: 1.25rem 2rem; }
+.disco-track { gap: 0.6rem; }
+.track-title { min-width: 0; flex: 1; }
+.track-dur { flex-shrink: 0; }
+.spotify-player { width: 100%; min-width: 0; margin-bottom: clamp(2rem, 4vw, 3rem); }
+.spotify-player iframe { display: block; width: 100%; height: 352px; border: 0; border-radius: 12px; }
+.archive-filter-btn, .filter-btn { min-height: 44px; }
+.faq-item.open .faq-answer { max-height: none; }
+footer { padding: 2rem var(--page-gutter); gap: 1rem 2rem; flex-wrap: wrap; }
+.footer-links { gap: 0.25rem 1.2rem; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+
+@media (max-width: 1100px) {
+  nav { flex-wrap: wrap; }
+  .nav-logo { margin-right: auto; }
+  .nav-links { order: 3; flex-basis: 100%; max-width: none; justify-content: flex-start; }
+  nav.nav-ready .nav-toggle {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-height: 44px; padding: 0.4rem 0.8rem;
+    border: 1px solid var(--border); border-radius: 4px;
+    background: transparent; color: var(--text); font: inherit; cursor: pointer;
+  }
+  nav.nav-ready .nav-links, nav.nav-ready .nav-social { display: none; }
+  nav.nav-ready.is-open { max-height: 100svh; overflow-y: auto; }
+  nav.nav-ready.is-open .nav-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  nav.nav-ready.is-open .nav-social { display: flex; order: 4; flex-basis: 100%; flex-wrap: wrap; }
+  .nav-links a { width: 100%; white-space: normal; }
+  .nav-social { display: flex; }
+}
+
+@media (max-width: 800px) {
+  .profile-grid, .room-layout, .disco-layout { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
+  .archive-grid, .fw-grid { columns: 2; column-gap: 1rem; }
+  footer { flex-direction: column; text-align: center; }
+  .footer-links { justify-content: center; }
+}
+
+@media (max-width: 480px) {
+  nav { gap: 0.5rem; align-items: center; }
+  .hero-sub { font-size: 0.8rem; letter-spacing: 0.1em; }
+  .hero-title span { display: block; }
+  .char-hero-name-zh { font-size: clamp(2.5rem, 12vw, 3.5rem); }
+  .char-card-header { gap: 0.75rem; }
+  .char-avatar { width: 68px; height: 68px; }
+  .char-hero-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .dialogue-line { grid-template-columns: minmax(0, 1fr); gap: 0.2rem; }
+  .archive-grid, .fw-grid { columns: 1; }
+  .secrets-header { gap: 0.75rem; }
+  .room-carousel, .room-placeholder { min-height: 200px; }
+  .room-slide img { max-height: 65svh; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}

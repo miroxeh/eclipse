@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>eCLIPSe.Box-log</title>
+  <title>eCLIPSe.Box_log</title>
   <style>
     :root {
       --bg: #0a0a0f;
@@ -765,7 +765,7 @@
     }
 
     .faq-item.open .faq-answer {
-      max-height: 600px;
+      max-height: var(--answer-height, 600px);
       padding-bottom: 1.5rem;
     }
 
@@ -837,7 +837,10 @@
       .char-avatar { width: 84px; height: 84px; }
       footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem 1.5rem; }
     }
+      .faq-question:focus-visible, .disco-track:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
   </style>
+  <link rel="stylesheet" href="responsive.css" />
+  <script src="responsive.js" defer></script>
 </head>
 <body>
 
@@ -877,7 +880,7 @@
   <p class="section-label">Sojourner</p>
   <h2 class="section-title">如何進入這個計畫<br/><em>How to Read This Project</em></h2>
   <p class="sojourner-intro">
-    eCLIPSe.Box-log 是一個整理虛擬偶像 eCLIPSe 創作痕跡的入口站。<br/>
+    eCLIPSe.Box_log 是一個整理虛擬偶像 eCLIPSe 創作痕跡的入口站。<br/>
     你可以從音樂、影像、角色檔案、世界觀、互動文本或 fan works 任一方式開始。
     這裡沒有唯一正確的順序；每一種觀看方式，都會讓你更靠近他們不同的一面。
   </p>
@@ -918,9 +921,9 @@
   <p class="section-label">Echos</p>
   <h2 class="section-title">eCLIPSe<br/><em>光與影之間</em></h2>
   <p class="eclipse-intro">
-    eCLIPSe 是這個計畫的核心：一組由三位虛擬成員構成的偶像團體。<br/>
-    他們不是單純的聊天角色，也不只是視覺設定，而是透過音樂、影像、社群事件與互動文本逐漸成形的存在。<br/>
-    光、影與交界，是他們的舞台；而每一位成員，都是一道需要被慢慢解讀的謎題。
+    eCLIPSe 是以「光影交界」為核心的三人男子虛擬偶像團體。<br/>
+    太陽夏澄凡負責熱場，月光季凌掌控局勢，影子文曜熙守住舞蹈與專業。<br/>
+    三人性格迥異，卻彼此支撐；有人低潮時，另外兩人會守住日常，陪他走過。
   </p>
 
   <div class="characters-grid">
@@ -944,10 +947,8 @@
         <span><strong>MBTI</strong> ENTJ</span>
         <span><strong>生日</strong> 11.5</span>
       </div>
-      <p class="char-difficulty">難度 ☆☆☆☆☆</p>
-      <p class="char-desc">
-        組合的月光形象，是那種讓人既仰望又難以親近的存在。外表強大沉穩，內裡卻對自我要求近乎苛刻。領袖氣質來自長年的壓抑與磨練——他不允許自己再次失敗。
-      </p>
+      <p class="char-difficulty">互動特質 · 理性克制</p>
+      <p class="char-desc">主唱與隊長，象徵月光。沉穩、自律、溫柔可靠，以理性與專業穩住團隊，也用完美的偶像形象保護自己，與親密關係保持距離。</p>
       <p class="char-quote">"I cannot fail again."</p>
       <a href="rylan.html" class="char-link"> ⟪查看個人檔案⟫ →</a>
       <br>
@@ -972,17 +973,15 @@
       </div>
       <div class="char-stats">
         <span><strong>身高</strong> 178cm</span>
-        <span><strong>MBTI</strong> ES/NFP</span>
+        <span><strong>MBTI</strong> ENFP/ESFP</span>
         <span><strong>生日</strong> 7.1</span>
       </div>
-      <p class="char-difficulty">難度 ???</p>
-      <p class="char-desc">
-        最耀眼的那一個，也是最難被真正看見的那一個。笑容是他最完美的偽裝。美籍華裔背景帶來的是雙重文化，以及雙重的不歸屬感——但他從不讓人看見這些。
-      </p>
+      <p class="char-difficulty">互動特質 · 熱情但不安</p>
+      <p class="char-desc">中心位與綜藝擔當，象徵太陽。熱情幽默、擅長熱場與寵粉；燦爛的笑容背後，藏著缺乏自信、害怕被拋下的不安。</p>
       <p class="char-quote">"Life is one big party!"</p>
       <a href="elliot.html" class="char-link"> ⟪查看個人檔案⟫ →</a>
       <br>
-      <a href="#" class="char-link"> ⟪準備中⟫ </a>
+      <span class="char-link"> ⟪準備中⟫ </span>
     </div>
 
     <!-- Jons -->
@@ -1004,10 +1003,8 @@
         <span><strong>MBTI</strong> INFJ</span>
         <span><strong>生日</strong> 1.3</span>
       </div>
-      <p class="char-difficulty">難度 ☆☆☆☆☆</p>
-      <p class="char-desc">
-        精準、冷靜、難以捉摸。他用沉默保護自己，用距離維持秩序。混血背景讓他在任何地方都是局外人——他選擇接受這個身分，而非反抗它。
-      </p>
+      <p class="char-difficulty">互動特質 · 高度疏離</p>
+      <p class="char-desc">舞蹈擔當與編舞者，象徵影子。清冷低調、觀察敏銳，以精準的舞蹈支撐團隊；私下重視邊界，習慣用沉默維持安全距離。</p>
       <p class="char-quote">"Don't disturb me."</p>
       <a href="jons.html" class="char-link"> ⟪查看個人檔案⟫ →</a>
       <br>
@@ -1058,7 +1055,27 @@
   eCLIPSe的新單曲已正式發行。<br/>
   你可以在 Spotify、Apple Music、YouTube Music、LINE MUSIC 等平台搜尋
   <strong>eCLIPSe + TOXIC </strong>，找到我們新發行的音樂。
+  <br>
+  <a href="https://open.spotify.com/artist/33IcvjLPUKWyguGeP3MCb6" target="_blank" rel="noopener noreferrer" class="char-link">
+  Spotify →
+  </a>
+  <BR>
+  <a href="https://www.youtube.com/@eCLIPSe.box_log/releases" target="_blank" rel="noopener noreferrer" class="char-link">
+  YouTube Music →
+  </a>
   </p>
+
+  <div class="spotify-player">
+    <iframe
+      title="eCLIPSe Spotify 播放器"
+      src="https://open.spotify.com/embed/artist/33IcvjLPUKWyguGeP3MCb6?utm_source=generator&amp;theme=0"
+      width="100%"
+      height="352"
+      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+      allowfullscreen
+      loading="lazy"
+    ></iframe>
+  </div>
 
   <div class="disco-layout">
 
@@ -1070,27 +1087,27 @@
       </div>
       <!-- 將 data-vid 替換為實際 YouTube 影片 ID -->
       <ul class="disco-tracks">
-        <li class="disco-track active" data-vid="2F-DiytYCso" data-title="Shadow Dance">
+        <li class="disco-track active" data-vid="2F-DiytYCso" data-title="ABYSS">
           <span class="track-num">01</span>
           <span class="track-title">ABYSS</span>
           <span class="track-dur">3:42</span>
         </li>
-        <li class="disco-track" data-vid="XnsDRmNRDDI" data-title="Lunar Orbit">
+        <li class="disco-track" data-vid="XnsDRmNRDDI" data-title="Spectre">
           <span class="track-num">02</span>
           <span class="track-title">Spectre</span>
           <span class="track-dur">3:35</span>
         </li>
-        <li class="disco-track" data-vid="MfRPkNqlBbA" data-title="Blank Canvas">
+        <li class="disco-track" data-vid="MfRPkNqlBbA" data-title="Disconnected Room">
           <span class="track-num">03</span>
           <span class="track-title">Disconnected Room</span>
           <span class="track-dur">2:42</span>
         </li>
-        <li class="disco-track" data-vid="yenWJNi6MgY" data-title="Iceberg">
+        <li class="disco-track" data-vid="yenWJNi6MgY" data-title="Monster">
           <span class="track-num">04</span>
           <span class="track-title">Monster</span>
           <span class="track-dur">2:37</span>
         </li>
-        <li class="disco-track" data-vid="nq9J41nVCHA" data-title="Solar Flare">
+        <li class="disco-track" data-vid="nq9J41nVCHA" data-title="直到雪淹沒我">
           <span class="track-num">05</span>
           <span class="track-title">直到雪淹沒我</span>
           <span class="track-dur">3:54</span>
@@ -1102,11 +1119,12 @@
     <div class="disco-player">
       <div class="disco-now-playing">
         <span class="disco-now-label">Now Playing</span>
-        <p class="disco-now-title" id="disco-now-title">Shadow Dance</p>
+        <p class="disco-now-title" id="disco-now-title">ABYSS</p>
       </div>
       <div class="disco-iframe-wrap">
         <iframe
           id="disco-iframe"
+          title="eCLIPSe 音樂播放器"
           src="https://www.youtube-nocookie.com/embed/2F-DiytYCso?rel=0&modestbranding=1&color=white"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen
@@ -1451,7 +1469,7 @@
   <h2 class="section-title">關於這個計畫</h2>
   <div class="about-text">
     <p>
-      eCLIPSe.Box-log 是一個介於虛擬與現實之間的跨媒介創作計畫。
+      eCLIPSe.Box_log 是一個介於虛擬與現實之間的跨媒介創作計畫。
       它以三位虛擬偶像 eCLIPSe 為核心，整理音樂、影像、角色檔案、互動文本、社群事件與 fan works 等創作痕跡。
     </p>
     <p>
@@ -1481,7 +1499,7 @@
         <div class="faq-icon">+</div>
       </div>
       <div class="faq-answer">
-        eCLIPSe.Box-log 是一個以虛擬偶像 eCLIPSe 為核心的跨媒介創作計畫。
+        eCLIPSe.Box_log 是一個以虛擬偶像 eCLIPSe 為核心的跨媒介創作計畫。
         內容包含音樂、影像、角色設定、互動文本、視覺典藏、社群事件與 fan works。
         它不是單一平台的角色頁，而是一個整理這些創作痕跡的入口站。
       </div>
@@ -1552,7 +1570,7 @@
 
 <!-- FOOTER -->
 <footer>
-  <span>© 2026 eCLIPSe.Box-log · All rights reserved</span>
+  <span>© 2026 eCLIPSe.Box_log · All rights reserved</span>
   <div class="footer-links">
     <a href="#discography">Works</a>
     <a href="#about">About</a>
@@ -1569,10 +1587,20 @@
   const discoNowTitle = document.getElementById('disco-now-title');
 
   document.querySelectorAll('.disco-track').forEach(track => {
+    track.setAttribute('role', 'button');
+    track.tabIndex = 0;
+    track.setAttribute('aria-pressed', String(track.classList.contains('active')));
+    track.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        track.click();
+      }
+    });
     track.addEventListener('click', () => {
       document.querySelectorAll('.disco-track').forEach(t => t.classList.remove('active'));
       track.classList.add('active');
-      discoNowTitle.textContent = track.dataset.title;
+      document.querySelectorAll('.disco-track').forEach(t => t.setAttribute('aria-pressed', String(t === track)));
+      discoNowTitle.textContent = track.querySelector('.track-title').textContent;
       discoIframe.src =
         `https://www.youtube-nocookie.com/embed/${track.dataset.vid}?rel=0&modestbranding=1&color=white&autoplay=1`;
     });
@@ -1592,12 +1620,32 @@
   });
 
   // FAQ toggle
-  document.querySelectorAll('.faq-question').forEach(q => {
+  document.querySelectorAll('.faq-question').forEach((q, index) => {
+    q.setAttribute('role', 'button');
+    q.tabIndex = 0;
+    q.setAttribute('aria-expanded', 'false');
+    const answer = q.nextElementSibling;
+    answer.id = `faq-answer-${index + 1}`;
+    answer.hidden = true;
+    q.setAttribute('aria-controls', answer.id);
+    q.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        q.click();
+      }
+    });
     q.addEventListener('click', () => {
       const item = q.parentElement;
       const isOpen = item.classList.contains('open');
       document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
       if (!isOpen) item.classList.add('open');
+      document.querySelectorAll('.faq-item').forEach(entry => {
+        const expanded = entry.classList.contains('open');
+        entry.querySelector('.faq-question').setAttribute('aria-expanded', String(expanded));
+        const answer = entry.querySelector('.faq-answer');
+        answer.hidden = !expanded;
+        if (expanded) answer.style.setProperty('--answer-height', `${answer.scrollHeight + 48}px`);
+      });
     });
   });
 
